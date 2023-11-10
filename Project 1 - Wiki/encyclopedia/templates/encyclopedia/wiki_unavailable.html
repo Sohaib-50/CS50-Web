@@ -1,0 +1,14 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Page Not Found
+{% endblock %}
+
+{% block body %}
+    <h1> No wiki entry for "{{ title }}" found. </h1>
+
+    <ul>
+        {{ contents }}
+    </ul>
+
+{% endblock %}
