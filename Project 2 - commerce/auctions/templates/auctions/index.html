@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    <div id="listings">
+    {% for listing in listing_details %}
+            <a href="{% url 'auctions:listing' listing.id %}">
+            <div class="listing">
+                <div class="listing-text">
+                    <h4> {{ listing.title }} </h4>
+                    <p> {{ listing.description | truncatechars:100 }} </p>
+                    <p> <b> Current Price: </b> PKR {{ listing.current_price }} </p>
+                </div>
+                <div class="listing-img listing-img-sm">
+                    {% if listing.image_url %}
+                        <img src="{{ listing.image_url }}" alt="listing image">
+                    {% else %}
+                        <p>No image! </p>
+                    {% endif %}
+                </div>
+            </div>
+            </a>
+
+    {% endfor %}
+    </div>
+{% endblock %}

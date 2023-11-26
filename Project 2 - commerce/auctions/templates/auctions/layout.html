@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}Auctions{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <header class="container-fluid">
+        <div class="row">
+
+            <div class="col-6 d-flex flex-column align-items-start justify-content-center">
+                <!-- bold heading -->
+                <a href="{% url 'auctions:index' %}">
+                    <h1 class="display-4 font-weight-bold">Auctions</h1>
+                </a>
+            </div>
+
+            <!-- vertically centered, aligned to right -->
+            <div class="col-6 d-flex flex-column align-items-end justify-content-center">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'auctions:index' %}">Active Listings</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'auctions:logout' %}">Log Out</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'auctions:login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'auctions:register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <div>
+                    {% if user.is_authenticated %}
+                    Signed in as <strong>{{ user.username }}</strong>.
+                    {% else %}
+                    Not signed in.
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </header>
+    <hr>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block body %}
+    {% endblock %}
+</body>
+
+</html>

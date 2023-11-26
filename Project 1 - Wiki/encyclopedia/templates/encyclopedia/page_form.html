@@ -1,0 +1,32 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{ page_title }}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {{ page_title }}
+    </h1>
+
+    <form action="{% if creating_new %}{% url 'encyclopedia:new' %}
+                    {% else %}{% url 'encyclopedia:edit' title=title %}
+                    {% endif %}" method="post">
+
+        {% csrf_token %}
+
+        <label for="title"> Title </label>
+        <input type="text" name="title" required 
+            {% if not creating_new %} 
+                value="{{ title }}" disabled 
+            {% endif %} 
+            >
+
+        <label for="content" class="bigger" > Content </label>
+        <textarea name="content" required>{% if not creating_new %}{{ content }}{% endif %}</textarea>
+
+        <br>
+        <input type="submit" value="Save">
+    </form>
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<div class="row pl-3 pr-3 pb-3 d-flex justify-content-between align-items-center">
+    <h2>Listing - {{ listing_details.title }} </h2>
+
+    <div class="row m-0">
+        <!-- watchlist and close listing buttons -->
+        {% if user.is_authenticated %}
+
+            {% if request.user == listing_details.lister and listing_details.active %}
+            <form action="{% url 'auctions:close_listing' %}"  method="post" class="mr-2">
+                {% csrf_token %}
+                <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
+                <input type="submit" class="btn btn-danger"
+                    value="Close Listing">
+            </form>
+            {% endif %}
+
+            <form action="{% url 'auctions:toggle_watching' %}"  method="post">
+                {% csrf_token %}
+                <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
+                <input type="submit" class="btn btn-primary"
+                    value="{% if request.user.is_watching  %}Remove From Watchlist{% else %}Add To Watchlist{% endif %}">
+            </form>
+
+        {% endif %}
+    </div>
+
+</div>
+
+<div class="jumbotron listing-info listing-main-info">
+
+    <div class="row">
+
+        <div class="col-9">
+            <h3> Description: </h3>
+            <p> {{ listing_details.description }}</p>
+
+            <h3> Current Price: </h3>
+            <p> PKR {{ listing_details.current_price }} </p>
+
+            <h3> Category: </h3>
+            <p> {{ listing_details.category }} </p>
+
+            <h3> Listed By: </h3>
+            <p> {{ listing_details.lister }} </p>
+
+        </div>
+
+        <div class="col-3">
+            <div class="listing-img listing-img-lg">
+                {% if listing_details.image_url %}
+                <img src="{{ listing_details.image_url }}">
+                {% else %}
+                No Image
+                {% endif %}
+            </div>
+
+            <h3> Place a bid: </h3>
+            <form action="{% url 'auctions:bid' %}" method="post" class="comment-form">
+                {% csrf_token %}
+                <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
+                <input type="number" name="amount" step="0.01" required
+                    min="{{ listing_details.current_price }}">
+                <input type="submit" value="Bid" class="btn btn-primary">
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="jumbotron listing-info listing-further-info">
+
+    <h3> Comments: </h3>
+    
+    <div class="row">
+        <div class="col-8">
+            <ul class="entries">
+                {% for comment in comments %}
+                <li class="entry">
+                    <b> {{ comment.commenter }}: </b> {{ comment.content }}
+                </li>
+                {% empty %}
+                <li class="entry">
+                    <i> No comments yet. </i>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-4">
+            <!-- <h5> Add a comment: </h5> -->
+                <form action="{% url 'auctions:add_comment' %}" method="post" class="comment-form">
+                    {% csrf_token %}
+                    <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
+                    <input type="text" name="content" maxlength="255" required placeholder="Add a comment...">
+                    <input type="submit" value="Add" class="btn btn-primary">
+                </form>
+        </div>
+    </div>
+
+    <hr>
+    
+    <h3> Bidding History: </h3>
+    <div class="row">
+        <div class="col-8">
+            <ul class="entries">
+                {% for bid in bids %}
+                <li class="entry">
+                    <b> {{ bid.bidder }} </b> - PKR {{ bid.amount }}
+                </li>
+                {% empty %}
+                <li class="entry">
+                    <i> No bids yet. </i>
+                </li>
+                {% endfor%}
+            </ul>
+        </div>
+
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+{% endblock %}

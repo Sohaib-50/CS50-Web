@@ -1,0 +1,43 @@
+Listings:
+    * title
+    * description
+    * starting_bid
+    * active (bool)
+    * image_url (optional)
+    * category (optional)
+
+Bids:
+    * bidder (FK User)
+    * listing (FK Listing)
+    * amount
+
+User (inherit from django AbstractUser):
+    * username (already there)
+    * email (already there)
+    * password (already there)
+    * watchings (M2M Listing)
+
+Comments
+    * commenter (FK User)
+    * listing (FK Listing)
+    * content 
+    * timestamp
+
+Listing Page Todos:
+* watchlist(DONE)
+    * implement watchlist view logic
+
+* Bids (DONE)
+    * add bids URL in urls.py
+    * add url to from
+    * make view function
+    * implement bids logic view
+    * add list of bids in listing page
+
+* Close listing
+    * HTML: Logic: a form similar to watchlist one
+    * make url in urls.py
+    * make view logic
+    * if closed show closed on listing and won if winner
+
+    

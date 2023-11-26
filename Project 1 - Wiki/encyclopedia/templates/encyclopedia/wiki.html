@@ -8,7 +8,9 @@
     <h1>{{ title }}</h1>
 
     <ul>
-        {{ contents }}
+        {{ contents | safe }}
     </ul>
+
+    <a href="{% url 'encyclopedia:edit' title %}"> Edit </a>
 
 {% endblock %}

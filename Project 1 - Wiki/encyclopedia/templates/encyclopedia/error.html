@@ -1,0 +1,12 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Error
+{% endblock %}
+
+{% block body %}
+    <h1 style="color: red;"> ERROR! </h1>
+
+    {{ error_message | safe }}
+
+{% endblock %}
