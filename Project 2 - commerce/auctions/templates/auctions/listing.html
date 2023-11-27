@@ -3,32 +3,44 @@
 {% block body %}
 
 <div class="row pl-3 pr-3 pb-3 d-flex justify-content-between align-items-center">
-    <h2>Listing - {{ listing_details.title }} </h2>
-
-    <div class="row m-0">
-        <!-- watchlist and close listing buttons -->
-        {% if user.is_authenticated %}
-
-            {% if request.user == listing_details.lister and listing_details.active %}
-            <form action="{% url 'auctions:close_listing' %}"  method="post" class="mr-2">
-                {% csrf_token %}
-                <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
-                <input type="submit" class="btn btn-danger"
-                    value="Close Listing">
-            </form>
-            {% endif %}
-
-            <form action="{% url 'auctions:toggle_watching' %}"  method="post">
-                {% csrf_token %}
-                <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
-                <input type="submit" class="btn btn-primary"
-                    value="{% if request.user.is_watching  %}Remove From Watchlist{% else %}Add To Watchlist{% endif %}">
-            </form>
-
+    <h2>
+        Listing - {{ listing_details.title }} 
+        {% if not listing_details.active %}
+        <span class="badge badge-danger">Closed</span>
         {% endif %}
-    </div>
+    </h2>   
+
+    {% if listing_details.active %}
+       <div class="row m-0">
+            <!-- watchlist and close listing buttons -->
+            {% if user.is_authenticated %}
+
+                {% if request.user == listing_details.lister and listing_details.active %}
+                <form action="{% url 'auctions:close_listing' %}"  method="post" class="mr-2">
+                    {% csrf_token %}
+                    <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
+                    <input type="submit" class="btn btn-danger"
+                        value="Close Listing">
+                </form>
+                {% endif %}
+
+                <form action="{% url 'auctions:toggle_watching' %}"  method="post">
+                    {% csrf_token %}
+                    <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
+                    <input type="submit" class="btn btn-primary"
+                        value="{% if request.user.is_watching  %}Remove From Watchlist{% else %}Add To Watchlist{% endif %}">
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
 
 </div>
+
+{% if request.user.is_winner %}
+    <div class="winner row ml-3 mr-3 d-flex justify-content-center align-items-center">
+        <h2> Congrats For Winning This Item! </h2>
+    </div>
+{% endif %}
 
 <div class="jumbotron listing-info listing-main-info">
 
@@ -58,14 +70,16 @@
                 {% endif %}
             </div>
 
-            <h3> Place a bid: </h3>
-            <form action="{% url 'auctions:bid' %}" method="post" class="comment-form">
-                {% csrf_token %}
-                <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
-                <input type="number" name="amount" step="0.01" required
-                    min="{{ listing_details.current_price }}">
-                <input type="submit" value="Bid" class="btn btn-primary">
-            </form>
+            {% if listing_details.active and request.user.is_authenticated %}
+                <h3> Place a bid: </h3>
+                <form action="{% url 'auctions:bid' %}" method="post" class="comment-form">
+                    {% csrf_token %}
+                    <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
+                    <input type="number" name="amount" step="0.01" required
+                        min="{{ listing_details.current_price }}">
+                    <input type="submit" value="Bid" class="btn btn-primary">
+                </form>
+            {% endif %}
 
         </div>
 
@@ -80,8 +94,9 @@
         <div class="col-8">
             <ul class="entries">
                 {% for comment in comments %}
-                <li class="entry">
-                    <b> {{ comment.commenter }}: </b> {{ comment.content }}
+                <li class="entry d-flex justify-content-between align-items-center">
+                    <div> <b> {{ comment.commenter }}: </b> {{ comment.content }} </div>
+                    <div> [{{ comment.timestamp }}] </div>
                 </li>
                 {% empty %}
                 <li class="entry">
@@ -93,12 +108,14 @@
 
         <div class="col-4">
             <!-- <h5> Add a comment: </h5> -->
+            {% if request.user.is_authenticated %}
                 <form action="{% url 'auctions:add_comment' %}" method="post" class="comment-form">
                     {% csrf_token %}
                     <input hidden type="text" name="listing_id" value="{{ listing_details.id }}">
                     <input type="text" name="content" maxlength="255" required placeholder="Add a comment...">
                     <input type="submit" value="Add" class="btn btn-primary">
                 </form>
+            {% endif %} 
         </div>
     </div>
 

@@ -1,16 +1,26 @@
 {% extends "auctions/layout.html" %}
 
+{% block title %}
+    {{ title }}
+{% endblock %}
+
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>
+        {{ title }}
+    </h2>
 
     <div id="listings">
-    {% for listing in listing_details %}
+    {% for listing in listings %}
             <a href="{% url 'auctions:listing' listing.id %}">
             <div class="listing">
                 <div class="listing-text">
                     <h4> {{ listing.title }} </h4>
                     <p> {{ listing.description | truncatechars:100 }} </p>
-                    <p> <b> Current Price: </b> PKR {{ listing.current_price }} </p>
+                    {% if not listing.active %}
+                        <p> <span class="badge badge-danger">Closed</span> </p>
+                    {% else %}
+                        <p> <b> Current Price: </b> PKR {{ listing.current_price }} </p>
+                    {% endif %}
                 </div>
                 <div class="listing-img listing-img-sm">
                     {% if listing.image_url %}
@@ -21,7 +31,8 @@
                 </div>
             </div>
             </a>
-
+    {% empty %}
+        <p> No listing in {{ title }} </p>
     {% endfor %}
     </div>
 {% endblock %}

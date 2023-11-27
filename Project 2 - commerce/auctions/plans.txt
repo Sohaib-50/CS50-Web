@@ -34,10 +34,12 @@ Listing Page Todos:
     * implement bids logic view
     * add list of bids in listing page
 
-* Close listing
+* Close listing (DONE)
     * HTML: Logic: a form similar to watchlist one
     * make url in urls.py
     * make view logic
     * if closed show closed on listing and won if winner
+
+* watchlist
 
     

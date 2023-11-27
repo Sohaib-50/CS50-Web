@@ -28,16 +28,19 @@
                         <a class="nav-link" href="{% url 'auctions:index' %}">Active Listings</a>
                     </li>
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'auctions:logout' %}">Log Out</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'auctions:watchlist' %}"> Watchlist </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'auctions:logout' %}">Log Out</a>
+                        </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'auctions:login' %}">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'auctions:register' %}">Register</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'auctions:login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'auctions:register' %}">Register</a>
+                        </li>
                     {% endif %}
                 </ul>
                 <div>

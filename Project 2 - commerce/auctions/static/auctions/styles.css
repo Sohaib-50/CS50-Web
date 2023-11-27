@@ -4,9 +4,9 @@ body {
 
 #listings {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(500px, 0.5fr));
     grid-gap: 10px;
-    margin: 20px;
+    /* margin: 20px; */
 }
 
 a {
@@ -153,4 +153,18 @@ form > input[type=text], form > input[type=number] {
 .btn-primary:active, .btn-primary:focus {
     background-color: rgba(137, 43, 226, 0.3);
     border-color: rgba(137, 43, 226, 0.9);
+}
+
+.winner {
+    background-color: rgba(137, 43, 226, 0.3);
+    color: blueviolet;
+    box-shadow: 0 0 0 0.9rem rgba(137, 43, 226, 0.1);
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.badge-danger {
+    font-size: 1.2rem;
 }

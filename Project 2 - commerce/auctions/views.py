@@ -11,15 +11,16 @@ from .models import Bids, Comments, Listing, User
 
 
 def index(request):
-    listing_details = Listing.objects.filter(active=True).annotate(
+    listings = Listing.objects.filter(active=True).annotate(
         current_price=Max('bids__amount')
     )
-    for listing in listing_details:
+    for listing in listings:
         if listing.current_price is None:
             listing.current_price = listing.starting_bid
 
     return render(request, "auctions/index.html", {
-        "listing_details": listing_details
+        "listings": listings,
+        "title": "Active Listings"
     })
 
 def login_view(request):
@@ -79,6 +80,10 @@ def listing(request, listing_id):
     comments = Comments.objects.filter(listing=listing_details).order_by('-timestamp')
     listing_details.current_price = bids[0].amount if bids else listing_details.starting_bid
     
+    if not listing_details.active:
+        winner = bids[0].bidder
+        request.user.is_winner = True if request.user == winner else False
+
     # find watchlist status if there's someone signed in
     if request.user.is_authenticated:
         user = User.objects.get(pk=request.user.id)
@@ -156,4 +161,23 @@ def bid(request):
 @login_required
 def close_listing(request):
     selected_listing = Listing.objects.get(pk=request.POST['listing_id'])
-    
+    selected_listing.active = False
+    selected_listing.save()
+    messages.info(request, 'Listing Closed Successfully')
+    return HttpResponseRedirect(reverse("auctions:listing", args=(selected_listing.id,)))
+
+
+@login_required
+def watchlist(request):
+    user = request.user
+    watchlist = user.watchlist.all().annotate(
+        current_price=Max('bids__amount')
+    )
+    for listing in watchlist:
+        if listing.current_price is None:
+            listing.current_price = listing.starting_bid
+
+    return render(request, "auctions/index.html", {
+        "listings": watchlist,
+        "title": "Watchlist"
+    })
