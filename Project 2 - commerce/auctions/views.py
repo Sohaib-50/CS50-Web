@@ -7,16 +7,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from .forms import ListingForm
+from .helpers import annotate_current_price
 from .models import Bids, Comments, Listing, User
 
 
 def index(request):
-    listings = Listing.objects.filter(active=True).annotate(
-        current_price=Max('bids__amount')
-    )
-    for listing in listings:
-        if listing.current_price is None:
-            listing.current_price = listing.starting_bid
+    listings = annotate_current_price(Listing.objects.filter(active=True))
 
     return render(request, "auctions/index.html", {
         "listings": listings,
@@ -170,14 +167,49 @@ def close_listing(request):
 @login_required
 def watchlist(request):
     user = request.user
-    watchlist = user.watchlist.all().annotate(
-        current_price=Max('bids__amount')
-    )
-    for listing in watchlist:
-        if listing.current_price is None:
-            listing.current_price = listing.starting_bid
+    watchlist = annotate_current_price(user.watchlist.all())
 
     return render(request, "auctions/index.html", {
         "listings": watchlist,
         "title": "Watchlist"
     })
+
+
+def categories(request):
+    categories = Listing.objects.values('category').distinct().exclude(category='')
+    categories = [category['category'] for category in categories]
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+
+def category(request, category):
+    category_listings = annotate_current_price(Listing.objects.filter(category=category, active=True))
+    return render(request, "auctions/index.html", {
+        "listings": category_listings,
+        "title": f"Listings - Category: {category}"
+    })
+
+@login_required
+def create_listing(requst):
+    if requst.method == "GET":
+        return render(requst, "auctions/create_listing.html", {
+            "form": ListingForm()
+        }
+    )
+    
+    # if method POST
+    form = ListingForm(requst.POST)
+    if form.is_valid():
+        listing = form.save(commit=False)
+        listing.lister = requst.user
+        listing.save()
+        messages.info(requst, 'Listing created successfully')
+        listing_id = listing.id
+        return HttpResponseRedirect(reverse("auctions:listing", args=(listing_id,)))
+    else:
+        messages.info(requst, 'Error creating listing')
+        return render(requst, "auctions/create_listing.html", {
+            "form": form
+        }
+    )

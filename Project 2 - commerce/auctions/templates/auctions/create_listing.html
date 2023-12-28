@@ -1,0 +1,19 @@
+
+{% extends "auctions/layout.html" %}    
+
+{% block body %}
+<h2> Create A New Listing </h2>
+
+<div class="jumbotron p-20 bg-lt-purple mt-3">
+    <form action="{% url 'auctions:create_listing' %}" method="post" >
+        {% csrf_token %}
+
+        {{ form }}
+
+        <input type="submit" class="btn btn-primary mt-4" value="Create Listing">
+    </form>
+</div>
+
+
+
+{% endblock %}

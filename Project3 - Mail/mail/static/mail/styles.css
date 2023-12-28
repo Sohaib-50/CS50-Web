@@ -1,0 +1,23 @@
+textarea {
+    min-height: 400px;
+}
+
+
+#email-view * {
+    padding-bottom: 10px;
+}
+
+#email-body {
+    white-space: pre-wrap;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 20px;
+}
+
+tbody tr:hover {
+    cursor: pointer;
+}
+
+tbody tr.read {
+    background-color: #dcdcdc;
+}

@@ -9,7 +9,7 @@
         {{ title }}
     </h2>
 
-    <div id="listings">
+    <div class="flexible_grid p-20">
     {% for listing in listings %}
             <a href="{% url 'auctions:listing' listing.id %}">
             <div class="listing">
@@ -19,7 +19,7 @@
                     {% if not listing.active %}
                         <p> <span class="badge badge-danger">Closed</span> </p>
                     {% else %}
-                        <p> <b> Current Price: </b> PKR {{ listing.current_price }} </p>
+                        <p> <b> Current Price: </b> PKR {{ listing.current_price|floatformat:2 }} </p>
                     {% endif %}
                 </div>
                 <div class="listing-img listing-img-sm">

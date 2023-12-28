@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2> Categories </h2>
+
+<div class="jumbotron p-20 bg-lt-purple mt-3">
+    <!-- grid ul -->
+    <ul class="list-group flexible_grid">
+        {% for category in categories %}
+        <a href="{% url 'auctions:category' category %}">
+            <li class="list-group-item text-center">
+                <h4> {{ category }} </h4>
+            </li>
+        </a>
+        {% endfor %}
+
+        <!-- {% for i in "12345" %}
+            {% for category in categories %}
+            <a href="{% url 'auctions:category' category %}">
+                <li class="list-group-item text-center">
+                    <h4> {{ category }} </h4>
+                </li>
+            </a>
+            {% endfor %}
+        {% endfor %} -->
+
+
+    </ul>
+</div>
+
+{% endblock %}

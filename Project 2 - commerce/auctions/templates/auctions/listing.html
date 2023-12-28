@@ -42,13 +42,13 @@
     </div>
 {% endif %}
 
-<div class="jumbotron listing-info listing-main-info">
+<div class="jumbotron p-20 bg-lt-purple">
 
     <div class="row">
 
         <div class="col-9">
             <h3> Description: </h3>
-            <p> {{ listing_details.description }}</p>
+            <p> {{ listing_details.description|linebreaks }} </p>
 
             <h3> Current Price: </h3>
             <p> PKR {{ listing_details.current_price }} </p>
@@ -86,7 +86,7 @@
     </div>
 </div>
 
-<div class="jumbotron listing-info listing-further-info">
+<div class="jumbotron p-20 bg-white">
 
     <h3> Comments: </h3>
     

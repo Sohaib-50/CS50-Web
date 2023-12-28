@@ -2,11 +2,10 @@ body {
     padding: 10px 20px;    
 }
 
-#listings {
+.flexible_grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(500px, 0.5fr));
     grid-gap: 10px;
-    /* margin: 20px; */
 }
 
 a {
@@ -91,19 +90,19 @@ h1, h4 {
 .listing-img-sm > img, .listing-img-lg > img {
     max-width: fill-available;
     min-width: 100%;
-    max-height: fit-content;
+    max-height: 100%;
 }
 
 
-.listing-info {
+.p-20 {
     padding: 20px;
 }
 
-.listing-main-info {
+.bg-lt-purple {
     background-color: rgba(137, 43, 226, 0.123);
 }
 
-.listing-further-info {
+.bg-white {
     background-color: white;
 }
 
@@ -167,4 +166,8 @@ form > input[type=text], form > input[type=number] {
 
 .badge-danger {
     font-size: 1.2rem;
+}
+
+.list-group-item:hover {
+    background-color: rgba(137, 43, 226, 0.3);
 }
