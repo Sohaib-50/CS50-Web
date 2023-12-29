@@ -1,0 +1,1 @@
+- Use javascript "navigate" to get htmls and render

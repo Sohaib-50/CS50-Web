@@ -11,8 +11,13 @@
 }
 
 
-#new-post form {
+#new-post-form {
     margin: 0 50px;
+}
+
+#new-post-form.disabled {
+    opacity: 0.5; 
+    pointer-events: none;
 }
 
 .post {
