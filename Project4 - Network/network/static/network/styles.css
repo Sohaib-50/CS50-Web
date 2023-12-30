@@ -3,6 +3,54 @@
     font-family: sans-serif;
 }
 
+.message {
+    border: 2px solid slateblue;
+    border-radius: 3px;
+    background-color: rgba(106, 90, 205, 0.5);
+    /* color: white; */
+    margin: 10px 20px;
+    padding: 5px 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+#notifications {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.notification {
+    border-radius: 3px;
+    background-color: rgba(106, 90, 205, 0.2);
+    margin-bottom: 10px;
+    padding: 5px 30px;
+    font-size: 0.9rem;
+    animation-name: fadeout;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
 #new-post {
     margin: 0 40px;
     padding: 10px;
@@ -25,6 +73,18 @@
     border-radius: 3px;
     padding: 15px;
     margin: 10px;
+    animation-name: fadein;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .post-header, .post-body {
@@ -66,4 +126,20 @@
     align-items: flex-end;
 }
 
+.post-content {
+    white-space: pre-line;
+}
 
+.post-btns {
+    font-size: 0.85rem;
+}
+
+.btn {
+    background-color: slateblue;
+    color: white;
+}
+
+.btn:hover {
+    background-color: rgba(106, 90, 205, 0.8);
+    color: white;
+}

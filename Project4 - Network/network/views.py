@@ -71,5 +71,37 @@ def new_post(request):
         return JsonResponse({"error": "PUT request required."}, status=400)
     
     data = json.loads(request.body)
+    content = data.get("content", "")
+    if not content:
+        return JsonResponse({"error": "Content is required."}, status=400)  
+    
+    # Create post
+    try:
+        post = Post(
+            user=request.user,
+            content=content
+        )
+        post.save()
+    except:
+        return JsonResponse({"error": "Error creating post."}, status=500)  
 
-    return JsonResponse({"message": "Post created successfully.", "data": data}, status=201)  # 201 means created
+    return JsonResponse({"message": "Post created successfully.", "post": post.serialize()}, status=201)
+
+
+def posts(request):
+
+    if request.method != "GET":
+        return JsonResponse({"error": "Only GET request allowed."}, status=400)
+    
+    # get posts of followed people or all people depending on request
+    if str(request.GET.get("following")).strip().lower() == "true":
+        posts = Post.objects.filter(user__in=request.user.following.all())
+    else:
+        posts = Post.objects.all()
+    posts = posts.order_by("-created")  # sort with most recent post first
+    
+    return JsonResponse([post.serialize() for post in posts], safe=False)
+
+
+
+    
