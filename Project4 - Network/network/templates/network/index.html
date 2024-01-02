@@ -8,24 +8,37 @@
 <div id="notifications">
 </div>
 
+<h1 id="page-title"></h1>
 
-{% if user.is_authenticated %}
-<div id="new-post">
-    <h3> New Post </h3>
-    <form id="new-post-form">
-        {% csrf_token %}
-        <div class="form-group">
-            <textarea class="form-control" id="new-post-content" rows="2" required maxlength="500"></textarea>
-        </div>
-        <div class="form-group row justify-content-end">
-            <button type="submit" class="btn">Post</button>
-        </div>
-    </form>
+<div id="posts-view">
+
+    {% if user.is_authenticated %}
+    <div id="new-post">
+        <h3> New Post </h3>
+        <form id="new-post-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea class="form-control" id="new-post-content" rows="2" required maxlength="500"></textarea>
+            </div>
+            <div class="form-group row justify-content-end">
+                <button type="submit" class="btn">Post</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <div id="posts">
+    </div>
 </div>
-{% endif %}
 
-<h1> All Posts </h1>
-<div id="posts">
+
+<div id="profile-view" style="display: none;">
+    <div id="profile">
+    </div>
+
+    <h3> User Posts </h3>
+    <div id="posts">
+    </div>
 </div>
 
 {% endblock %}
