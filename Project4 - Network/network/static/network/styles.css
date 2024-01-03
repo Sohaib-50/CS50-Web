@@ -108,6 +108,7 @@
     animation-fill-mode: forwards;
     background-color: rgba(106, 90, 205, 0.1);
 }
+
 @keyframes fadein {
     0% {
         opacity: 0;
@@ -141,6 +142,7 @@
     align-items: center;
     gap: 0.25em;
     border-bottom: 1px solid lightgray;
+    font-weight: lighter;
 }
 
 .post-timestamp {
@@ -173,6 +175,7 @@
 
 .post-content {
     white-space: pre-line;
+    width: 80%;
 }
 
 .post-btns {
@@ -183,7 +186,6 @@
     border: none;
     border-radius: 3px;
     padding: 3px 10px;
-    /* font-weight: lighter; */
     color: white;
     background-color: slateblue;
 }

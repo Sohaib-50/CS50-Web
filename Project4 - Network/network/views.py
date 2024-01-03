@@ -122,9 +122,9 @@ def posts(request, page_number=1):
     return JsonResponse({
         "posts": posts,
         "page_number": page_number,
-        "next_page_exists": page.has_next(),
-        "previous_page_exists": page.has_previous()
+        "total_pages": paginated_posts.num_pages,
     }, status=200)
+
 
 def profile(request, username):
     '''
@@ -168,7 +168,6 @@ def profile(request, username):
             response.raise_for_status()
         except requests.RequestException:
             return JsonResponse({"error": "Error fetching posts."}, status=500)
-        requested_user_details.update({"posts": response.json()["posts"]})
-        print(f"posts: {requested_user_details['posts']}")
+        requested_user_details.update({"posts_page": response.json()})
 
         return JsonResponse(requested_user_details, status=200)

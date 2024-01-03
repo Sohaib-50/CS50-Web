@@ -1,4 +1,4 @@
-import { load_profile_view } from "./main.js";
+import { load_profile_view, get_posts } from "./main.js";
 import { get_cookie } from "./utils.js";
 
 function make_component(html) {
@@ -84,7 +84,99 @@ function post_component(post) {
     return component;
 }
 
-function profile_component(user, add_follow_btn = false, following = false) {
+function pagination_component(page_number, total_pages) {
+    const component = make_component(`
+        <div id="pagination">
+            ${(page_number > 1) ?
+            '<button type="button" id="pagination-previous">&langle;</button>'
+            :
+            ''
+        }
+            <div id="pagination-pagecount">
+                <span id="pagination-pagecount-current">${page_number}</span>
+                / 
+                <span id="pagination-pagecount-total">${total_pages}</span>
+            </div>
+            ${(page_number < total_pages) ?
+            '<button type="button" id="pagination-next">&rangle;</button>'
+            :
+            ''
+        }
+        </div>
+    `);
+    return component;
+}
+
+function posts_component(posts_page, following = null, username = null) {
+
+    const component = make_component(`
+        <div id="posts">
+            
+        </div>
+    `);
+
+    const posts = posts_page.posts
+    if (!posts || posts.length === 0) {
+        component.innerHTML = "<p> <i> No posts </i> </p>";
+        return component;
+    }
+
+    // add posts
+    posts.forEach(post => {
+        component.appendChild(post_component(post));
+    });
+
+    // add pagination navigation
+    const page_number = posts_page.page_number;
+    const total_pages = posts_page.total_pages;
+    const pagination_component = make_component(`
+        <div id="pagination">
+            ${(page_number > 1) ?
+            '<button type="button" id="pagination-previous">&langle;</button>'
+            :
+            '<div>&nbsp;</div>'  // for stylistic purposes, to keep pagination centered, &nbsp; is a non-breaking space
+        }
+            <div id="pagination-pagecount">
+                <span id="pagination-pagecount-current">${page_number}</span>
+                / 
+                <span id="pagination-pagecount-total">${total_pages}</span>
+            </div>
+            ${(page_number < total_pages) ?
+            '<button type="button" id="pagination-next">&rangle;</button>'
+            :
+            '<div>&nbsp;</div>'  // for stylistic purposes, to keep pagination centered, &nbsp; is a non-breaking space
+        }
+        </div>
+    `);
+    component.appendChild(pagination_component);
+
+    // add event listeners to pagination next and previous buttons
+    const previous_btn = component.querySelector("#pagination-previous");
+    if (previous_btn) {
+        previous_btn.addEventListener('click', () => {
+            get_posts(following, username, page_number - 1)
+                .then(new_posts_page => {
+                    console.log(`Getting page ${page_number - 1} of posts`);
+                    component.replaceWith(posts_component(new_posts_page, following, username));
+                });
+        });
+    }
+
+    const next_btn = component.querySelector("#pagination-next");
+    if (next_btn) {
+        next_btn.addEventListener('click', () => {
+            get_posts(following, username, page_number + 1)
+                .then(new_posts_page => {
+                    console.log(`Getting page ${page_number + 1} of posts`);
+                    component.replaceWith(posts_component(new_posts_page, following, username));
+                });
+        });
+    }
+
+    return component;
+}
+
+function profile_component(user, add_follow_btn = false, current_user_following = false) {
     const component_html = `
         <div id="profile">
             <div id="profile-about">
@@ -148,4 +240,5 @@ function profile_component(user, add_follow_btn = false, following = false) {
 
 
 
-export { message_component, notification_component, post_component, profile_component };
+export { message_component, notification_component, post_component, posts_component, profile_component };
+

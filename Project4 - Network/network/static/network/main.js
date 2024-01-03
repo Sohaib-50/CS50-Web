@@ -1,4 +1,4 @@
-import { message_component, notification_component, post_component, profile_component } from './components.js';
+import { message_component, notification_component, post_component, posts_component, profile_component } from './components.js';
 import { handle_element } from './utils.js';
 
 
@@ -93,54 +93,33 @@ function create_new_post() {
 }
 
 
-function load_posts(posts, profile = false) {
-    console.log(`Loading ${posts.length} posts, profile: ${profile}`);
+function load_posts(posts_page, profile = false, following = null, username = null ) {
+    console.log(`Loading ${posts_page.posts.length} posts, profile: ${profile}`);
     const posts_div = profile ? profile_view.querySelector('#posts') : posts_view.querySelector('#posts');
     posts_div.innerHTML = "";  // clear posts
 
-
-    if (!posts || posts.length === 0) {
-        posts_div.innerHTML = "<p> <i> No posts </i> </p>";
-        return;
-    }
-
-
-    // add posts to DOM
-    posts.forEach(post => {
-        posts_div.appendChild(post_component(post));
-    });
-
-    // pagination buttons
-    posts_div.innerHTML += `
-        <div id="pagination">
-            <button type="button" id="pagination-previous">&langle;</button>
-            <div id="pagination-pagecount">
-                <span id="pagination-pagecount-current">1</span>
-                / 
-                <span id="pagination-pagecount-total">3</span>
-            </div>
-            <button type="button" id="pagination-next">&rangle;</button>
-        </div>`;
-
+    posts_div.replaceWith(posts_component(posts_page, following, username))
 }
 
-async function get_posts(following) {
-    let posts = [];
+async function get_posts(following = null, username = null, page_number = 1) {
+    let posts_page;
 
     // get posts from server
-    const url = `/posts?following=${following}`;
+    const url = (following != null) ?
+        `/posts/${page_number}?following=${following}`
+        :
+        `/posts/${page_number}?username=${username}`;
 
     await fetch(url)
         .then(response => response.json())
         .then(data => {
-            // console.log(data);
-            posts = data.posts || [];
+            posts_page = data;
         })
         .catch(error => {
             console.error(error);
         });
 
-    return posts;
+    return posts_page;
 }
 
 
@@ -161,9 +140,13 @@ function load_profile(username) {
         })
         .then(data => {
             const add_follow_btn = "current_user_follows" in data;
-            const following = add_follow_btn && data.current_user_follows;
-            profile_view.querySelector('#profile').replaceWith(profile_component(data, add_follow_btn, following));
-            load_posts(data.posts, true);
+            const current_user_following = add_follow_btn && data.current_user_follows;
+            profile_view.querySelector('#profile').replaceWith(profile_component(data, add_follow_btn, current_user_following));
+
+            const posts_page = data.posts_page;
+            const profile = true;
+            const following = false;
+            load_posts(posts_page, profile, following, username);
         })
         .catch(error => {
             console.error(error);
@@ -195,9 +178,12 @@ function load_posts_view(following = false) {
     page_title.innerHTML = following ? "Posts Of People You Follow" : "All Posts";
 
     // load posts
-    get_posts(following)
-        .then(posts => {
-            load_posts(posts);
+    const username = null;
+    get_posts(following, username, 1)
+        .then(posts_page => {
+            const username = null;
+            const profile = false;
+            load_posts(posts_page, profile, following, username);
         })
         .catch(error => {
             console.error(error);
@@ -228,4 +214,4 @@ function load_profile_view(username) {
 }
 
 
-export { load_profile_view }
+export { load_profile_view, get_posts }
