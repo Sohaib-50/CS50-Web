@@ -61,25 +61,117 @@ function post_component(post) {
         </div>
 
         <div class="post-body">
-            <div class="post-content">
-                ${post.content}
-            </div>
-            <div class="post-btns">
-                    <button class="post-edit">
-                        Edit
-                    </button>
-                    <button class="post-delete">
-                        Delete
-                    </button>
-            </div>
+            <div class="post-content">${post.content}</div>
+            
         </div>
-
-
     </div>
     `);
-    component.querySelector('.post-username').onclick = () => {
+    
+    // make username navigable
+    component.querySelector('.post-username').addEventListener('click', () => {
         load_profile_view(post.user);
+    });
+
+    // change heart to filled if post is liked by current user
+    if (post.current_user_likes === true) {
+        component.querySelector('.post-likes svg').replaceWith(make_component(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+        </svg>
+        `));
     }
+
+    // add buttons only if current user owns post
+    if (post.current_user_owns !== true) {
+        return component;
+    }
+
+    component.querySelector('.post-body').appendChild(make_component(`
+        <div class="post-btns">
+            <button class="post-edit">
+                Edit
+            </button>
+            <button class="post-save" style="display: none;">
+                Save
+            </button>
+            <!-- <button class="post-delete">
+                 Delete
+            </button> -->
+        </div>
+    `));
+
+    const edit_button = component.querySelector('.post-edit');
+    const save_button = component.querySelector('.post-save');
+    const post_content = component.querySelector(".post-content");
+
+    edit_button.addEventListener('click', () => {
+        console.log(`Editing post ${post.id}`);
+
+        // enable editing
+        post_content.classList.add("editable");
+        post_content.contentEditable = true;
+        edit_button.style.display = "none";
+        save_button.style.display = "block";
+    });
+
+    save_button.addEventListener('click', () => {
+        console.log(`Saving post ${post.id}`);
+
+        // disable editing
+        post_content.classList.remove("editable");
+        post_content.contentEditable = false;
+        edit_button.style.display = "block";
+        save_button.style.display = "none";
+
+        const new_content = post_content.innerHTML;
+
+        // if empty or same as previous content, don't save
+        if (new_content === "") {
+            post_content.innerHTML = post.content;
+            document.querySelector('#notifications')
+                .appendChild(notification_component("Post can't be empty."));
+            return;
+        }
+        else if (new_content === post.content) {
+            return;
+        }
+
+        // send request to server to update post
+        const request = new Request(
+            `post/${post.id}`,
+            {
+                method: 'PATCH',
+                headers: { 'X-CSRFToken': get_cookie('csrftoken') },
+                mode: 'same-origin', // Do not send CSRF token to another domain.
+                body: JSON.stringify({
+                    content: new_content
+                })
+            }
+        );
+        fetch(request)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error);
+                    });
+                }
+            })
+            .then(data => {
+                document.querySelector('#notifications')
+                    .appendChild(notification_component("Post updated."));
+            })
+            .catch(error => {
+                console.error(error);
+
+                // notification
+                document.querySelector('#notifications')
+                    .appendChild("Couldn't update post.");
+                document.querySelector('#notifications')
+                    .appendChild(notification_component(error.message));
+            });
+    });
 
     return component;
 }
@@ -193,7 +285,7 @@ function profile_component(user, add_follow_btn = false, current_user_following 
     if (add_follow_btn) {
         component.appendChild(make_component(`
             <div id="profile-follow">
-                <button id="profile-follow-btn" class="btn btn-primary"> ${following ? 'Unfollow' : 'Follow'} </button>
+                <button id="profile-follow-btn" class="btn btn-primary"> ${current_user_following ? 'Unfollow' : 'Follow'} </button>
             </div>`));
         component.querySelector('#profile-follow-btn').onclick = () => {
             const request = new Request(
@@ -203,7 +295,7 @@ function profile_component(user, add_follow_btn = false, current_user_following 
                     headers: { 'X-CSRFToken': get_cookie('csrftoken') },
                     mode: 'same-origin', // Do not send CSRF token to another domain.
                     body: JSON.stringify({
-                        follow: !following
+                        follow: !current_user_following
                     })
                 }
             );
@@ -221,9 +313,11 @@ function profile_component(user, add_follow_btn = false, current_user_following 
                     const current_followers_count = parseInt(component.querySelector('#profile-followers-count').innerHTML);
                     const updated_user = {
                         ...user,
-                        followers_count: current_followers_count + (following ? -1 : 1)
+                        followers_count: current_followers_count + (current_user_following ? -1 : 1)
                     }
-                    component.replaceWith(profile_component(updated_user, add_follow_btn, !following));
+                    component.replaceWith(profile_component(updated_user, add_follow_btn, !current_user_following));
+                    document.querySelector('#notifications')
+                        .appendChild(notification_component(`${current_user_following ? 'Unfollowed' : 'Followed'} ${user.username}.`));
                 })
                 .catch(error => {
                     console.error(error);

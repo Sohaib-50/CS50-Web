@@ -1,10 +1,9 @@
 .body {
-    margin: 10px 30px;
+    padding: 40px 30px;
     font-family: 'Roboto', sans-serif;
 }
 
 .navbar {
-    margin-bottom: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: rgba(106, 90, 205, 0.2) !important;
@@ -56,11 +55,18 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 20px 0;
+    z-index: 1;
+    width: 100%;
 }
 
 .notification {
     border-radius: 3px;
-    background-color: rgba(106, 90, 205, 0.2);
+    background-color: rgba(106, 90, 205, 0.7);
+    color: white;
     margin-bottom: 10px;
     padding: 5px 30px;
     font-size: 0.9rem;
@@ -171,11 +177,18 @@
 /* post contents and edit/delete buttons */
 .post-body {
     align-items: flex-end;
+    margin-top: 10px;
 }
 
 .post-content {
     white-space: pre-line;
     width: 80%;
+}
+.post-content.editable {
+    border: 1px solid lightgray;
+    background-color: white;
+    padding: 5px;
+    /* make italicized */
 }
 
 .post-btns {
@@ -223,6 +236,7 @@
 
 #profile-username {
     text-decoration: underline;
+    font-weight: bold;
     color: slateblue;
 
 }

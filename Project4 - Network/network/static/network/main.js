@@ -28,6 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // show posts view (with all posts not just following) initially
     load_posts_view(false);
+
+    // test out notifications
+    // setInterval(() => {
+    //     document.querySelector('#notifications')
+    //         .appendChild(notification_component("This is a test notification!"));
+    // }, 2000);
+
 });
 
 
@@ -37,6 +44,7 @@ function create_new_post() {
 
     // get form input values
     const content = new_post_form.querySelector("#new-post-content").value.trim();
+    console.log(content);
     const CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     // call server to add post
@@ -66,7 +74,7 @@ function create_new_post() {
 
             // notification
             document.querySelector('#notifications')
-                .appendChild(notification_component("Post created successfully!"));
+                .appendChild(notification_component("Post created."));
 
             // add post to DOM
             document.querySelector('#posts')
@@ -199,11 +207,13 @@ function load_profile_view(username) {
     // nav items
     handle_element('#nav-all-posts', element => { element.classList.remove("active") });
     handle_element('#nav-following', element => { element.classList.remove("active") });
-    if (username === document.querySelector('#nav-user').firstChild.innerHTML) {
-        handle_element('#nav-user', element => { element.classList.add("active") });
-    }
-    else {
-        handle_element('#nav-user', element => { element.classList.remove("active") });
+    if (document.querySelector('#nav-user')) {  // if user is not logged in, this element won't exist
+        if (username === document.querySelector('#nav-user').firstChild.innerHTML) {
+            handle_element('#nav-user', element => { element.classList.add("active") });
+        }
+        else {
+            handle_element('#nav-user', element => { element.classList.remove("active") });
+        }
     }
 
     // page title

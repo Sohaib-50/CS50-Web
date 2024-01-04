@@ -73,7 +73,7 @@ def new_post(request):
         return JsonResponse({"error": "PUT request required."}, status=400)
     
     data = json.loads(request.body)
-    content = data.get("content", "")
+    content = data.get("content", "").strip()
     if not content:
         return JsonResponse({"error": "Content is required."}, status=400)  
     
@@ -86,8 +86,13 @@ def new_post(request):
         post.save()
     except:
         return JsonResponse({"error": "Error creating post."}, status=500)  
-
-    return JsonResponse({"message": "Post created successfully.", "post": post.serialize()}, status=201)
+    
+    post = post.serialize()
+    post.update({
+        "current_user_likes": False,
+        "current_user_owns": True,
+    })
+    return JsonResponse({"message": "Post created successfully.", "post": post}, status=201)
 
 
 def posts(request, page_number=1):
@@ -117,7 +122,20 @@ def posts(request, page_number=1):
         page = paginated_posts.page(page_number)
     except:
         return JsonResponse({"error": f"Page {page_number} does not exist."}, status=404)
-    posts = [post.serialize() for post in page.object_list]
+    posts = list(page.object_list)
+
+    for i, post in enumerate(posts):
+        current_user_likes = False
+        current_user_owner = False
+        if request.user.is_authenticated:
+            current_user_likes = request.user in post.likers.all()
+            current_user_owner = request.user == post.user
+        post = post.serialize()
+        post.update({
+            "current_user_likes": current_user_likes,
+            "current_user_owns": current_user_owner,
+        })
+        posts[i] = post
     
     return JsonResponse({
         "posts": posts,
@@ -125,6 +143,42 @@ def posts(request, page_number=1):
         "total_pages": paginated_posts.num_pages,
     }, status=200)
 
+
+def post(request, post_id):
+    '''
+    API route to update a post (like/unlike or edit).
+    '''
+
+    if request.method != "PATCH":
+        return JsonResponse({"error": "Only PATCH request allowed."}, status=400)
+
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post with requested ID not found"}, status=404)
+    
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "A user must be signed in to use this route."}, status=403)
+    
+    data = json.loads(request.body)
+    like = data.get("like")
+    content = data.get("content")
+    if (like is None and content is None) or (like is not None and content is not None):
+        return JsonResponse({"error": "Must provide either like or content key but not both."}, status=400)
+    
+    if like is not None:
+        if like == True:
+            post.likers.add(request.user)
+        else:
+            post.likers.remove(request.user)
+        return JsonResponse({"message": f"Successfully {'liked' if like else 'unliked'} post"}, status=200)
+    else:  # content is not None
+        if request.user != post.user:
+            return JsonResponse({"error": "Not owner, not allowed to edit."}, status=403)
+        post.content = content
+        post.save()
+        return JsonResponse({"message": "Post content successfully edited."}, status=200)
+    
 
 def profile(request, username):
     '''
@@ -171,3 +225,4 @@ def profile(request, username):
         requested_user_details.update({"posts_page": response.json()})
 
         return JsonResponse(requested_user_details, status=200)
+    

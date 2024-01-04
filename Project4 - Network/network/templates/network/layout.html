@@ -7,11 +7,18 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
         <script type="module" src="{% static 'network/main.js' %}"></script>
+        <link rel="icon" href="{% static 'network/images/logo.png' %}" type="image/png">
+
     </head>
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'network:index' %}">Network</a>
+            <!-- <a class="navbar-brand" href="{% url 'network:index' %}">Network</a> -->
+            <a class="navbar-brand" href="{% url 'network:index' %}">
+                <img style="height: fit-content; width: 50px;"
+                src="{% static 'network/images/logo.png' %}" alt="Network Logo">
+                Network
+            </a>
           
             <div>
               <ul class="navbar-nav mr-auto">
