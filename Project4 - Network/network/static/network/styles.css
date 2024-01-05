@@ -1,20 +1,49 @@
+:root {
+    --main-color-1: rgb(7, 55, 114);
+    --main-color-1-light: rgba(7, 55, 114, 0.8);
+    --main-color-1-lighter: rgba(7, 55, 114, 0.2);
+    --main-color-1-lightest: rgba(7, 55, 114, 0.1);
+
+    --main-color-2: rgb(3, 113, 208);
+    --main-color-2-light: rgba(3, 113, 208, 0.8);
+    --main-color-2-lighter: rgba(3, 113, 208, 0.2);
+    --main-color-2-lightest: rgba(3, 113, 208, 0.1);
+}
+
 .body {
     padding: 40px 30px;
     font-family: 'Roboto', sans-serif;
 }
 
+#logo {
+    height: 60px;
+    width: 60px;
+}
+
 .navbar {
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: rgba(106, 90, 205, 0.2) !important;
-    border-bottom: 1px solid lightgray;
+    margin: 0;
+    width: 100%;
+    background: rgb(3, 113, 208);
+    background: linear-gradient(180deg, var(--main-color-2-lightest) 0%, white 100%);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbar-brand {
     font-size: 1.75rem;
     font-weight: bold;
-    color: slateblue !important;
+    /* color: slateblue !important; */
+    color: var(--main-color-1) !important;
     font-family: 'Courier New', Courier, monospace;
+}
+
+.nav-link {
+    text-align: center;
 }
 
 .nav-link:hover {
@@ -22,19 +51,19 @@
 }
 
 .nav-link.active {
-    color: slateblue !important;    
-    border-bottom: 2px solid slateblue;
+    color: rgb(7, 55, 114) !important;
+    border-bottom: 2px solid var(--main-color-2);
 }
 
 #page-title {
     font-weight: bold;
-    color: slateblue;
+    color: var(--main-color-1);
     text-align: center;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .message {
-    border: 2px solid slateblue;
+    border: 2px solid rgb(7, 55, 114);
     border-radius: 3px;
     background-color: rgba(106, 90, 205, 0.5);
     /* color: white; */
@@ -79,9 +108,11 @@
     0% {
         opacity: 1;
     }
+
     90% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
         display: none;
@@ -101,7 +132,7 @@
 }
 
 #new-post-form.disabled {
-    opacity: 0.5; 
+    opacity: 0.5;
     pointer-events: none;
 }
 
@@ -112,20 +143,22 @@
     animation-name: fadein;
     animation-duration: 0.4s;
     animation-fill-mode: forwards;
-    background-color: rgba(106, 90, 205, 0.1);
+    background-color: var(--main-color-1-lightest);
 }
 
 @keyframes fadein {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
 
 
-.post-header, .post-body {
+.post-header,
+.post-body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -140,7 +173,7 @@
 }
 
 /* timestamp and username */
-.post-info { 
+.post-info {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -156,10 +189,11 @@
 }
 
 .post-username {
-    color: slateblue;
+    color: rgb(7, 55, 114);
     font-weight: bold;
 
 }
+
 .post-username:hover {
     cursor: pointer;
 }
@@ -184,6 +218,7 @@
     white-space: pre-line;
     width: 80%;
 }
+
 .post-content.editable {
     border: 1px solid lightgray;
     background-color: white;
@@ -200,11 +235,12 @@
     border-radius: 3px;
     padding: 3px 10px;
     color: white;
-    background-color: slateblue;
+    background-color: var(--main-color-1);
 }
 
 .post-btns button:hover {
     cursor: pointer;
+    background-color: var(--main-color-1-light);
 }
 
 .post-delete {
@@ -212,12 +248,12 @@
 }
 
 .btn {
-    background-color: slateblue;
+    background-color: var(--main-color-1);
     color: white;
 }
 
 .btn:hover {
-    background-color: rgba(106, 90, 205, 0.8);
+    background-color: var(--main-color-1-light);
     color: white;
 }
 
@@ -237,7 +273,7 @@
 #profile-username {
     text-decoration: underline;
     font-weight: bold;
-    color: slateblue;
+    color: rgb(7, 55, 114);
 
 }
 
@@ -263,7 +299,7 @@
 #pagination button {
     border: none;
     background: none;
-    color: slateblue;
+    color: var(--main-color-1);
     font-weight: bold;
     border-radius: 50%;
     width: 30px;
@@ -272,5 +308,5 @@
 
 #pagination button:hover {
     cursor: pointer;
-    background-color: rgba(106, 90, 205, 0.2);
+    background-color: var(--main-color-2-lighter);
 }
