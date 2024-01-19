@@ -124,19 +124,23 @@ def posts(request, page_number=1):
         return JsonResponse({"error": f"Page {page_number} does not exist."}, status=404)
     posts = list(page.object_list)
 
+    print(f"request.user inside posts view: {request.user}")
     for i, post in enumerate(posts):
-        current_user_likes = False
-        current_user_owner = False
+        current_user_likes = None
+        current_user_owns = None
+        
         if request.user.is_authenticated:
             current_user_likes = request.user in post.likers.all()
-            current_user_owner = request.user == post.user
+            current_user_owns = request.user == post.user
+            
         post = post.serialize()
         post.update({
             "current_user_likes": current_user_likes,
-            "current_user_owns": current_user_owner,
+            "current_user_owns": current_user_owns,
         })
         posts[i] = post
     
+    print(posts[0].keys())
     return JsonResponse({
         "posts": posts,
         "page_number": page_number,
@@ -171,7 +175,7 @@ def post(request, post_id):
             post.likers.add(request.user)
         else:
             post.likers.remove(request.user)
-        return JsonResponse({"message": f"Successfully {'liked' if like else 'unliked'} post"}, status=200)
+        return JsonResponse({"message": f"Successfully {'liked' if like else 'unliked'} post", "liked": like}, status=200)
     else:  # content is not None
         if request.user != post.user:
             return JsonResponse({"error": "Not owner, not allowed to edit."}, status=403)
@@ -216,13 +220,18 @@ def profile(request, username):
             )
 
         # add user's posts (using our posts API)
+        print(f"request.user inside profile view: {request.user}")
         try:
             uri = request.build_absolute_uri(reverse("network:posts") + f"?username={requested_user.username}")
-            response = requests.get(uri)
+            headers = {k: v for k, v in request.headers.items()}  # copy headers from original request
+            response = requests.get(uri, headers=headers)
             response.raise_for_status()
         except requests.RequestException:
             return JsonResponse({"error": "Error fetching posts."}, status=500)
+        
+
         requested_user_details.update({"posts_page": response.json()})
+            
 
         return JsonResponse(requested_user_details, status=200)
     

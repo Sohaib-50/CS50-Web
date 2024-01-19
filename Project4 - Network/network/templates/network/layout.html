@@ -5,59 +5,67 @@
 
 <head>
     <title>{% block title %}Social Network{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{% static 'network/styles.css' %}" rel="stylesheet">
-    <script type="module" src="{% static 'network/main.js' %}"></script>
     <link rel="icon" href="{% static 'network/images/logo-transparent.png' %}" type="image/png">
-
+    {% block head %}
+    {% endblock %}
 </head>
 
 <body>
 
+   
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!-- <a class="navbar-brand" href="{% url 'network:index' %}">Network</a> -->
         <a class="navbar-brand" href="{% url 'network:index' %}">
             <img id="logo" src="{% static 'network/images/logo-transparent.png' %}" alt="Network Logo">
-            Network
+            <div> Network </div>
         </a>
-
-        <div>
-            <ul class="navbar-nav mr-auto">
-                <!-- {% if user.is_authenticated %}
+    
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto"> <!-- Adjusted to align items to the right -->
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-all-posts">All Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-following">Following</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" id="nav-user"><strong>{{ user.username }}</strong></a>
                     </li>
-                {% endif %} -->
-                <li class="nav-item">
-                    <a class="nav-link active" id="nav-all-posts">All Posts</a>
-                </li>
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" id="nav-following">Following</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="nav-user"><strong>{{ user.username }}</strong></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'network:logout' %}">Log Out</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'network:logout' %}">Log Out</a>
+                    </li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'network:login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'network:register' %}">Register</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-all-posts" href="{% url 'network:index' %}">All Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-login" href="{% url 'network:login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-register" href="{% url 'network:register' %}">Register</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
     </nav>
+    
 
     <div class="body">
         {% block body %}
         {% endblock %}
     </div>
-</body>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
 
 </html>

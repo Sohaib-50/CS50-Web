@@ -1,4 +1,4 @@
-import { load_profile_view, get_posts } from "./main.js";
+import { get_posts, load_profile_view } from "./main.js";
 import { get_cookie } from "./utils.js";
 
 function make_component(html) {
@@ -32,6 +32,32 @@ function notification_component(notification_text) {
 }
 
 
+function like_heart_component(liked=false) {
+    if (liked === true) {
+        return make_component(`
+            <div class="post-likes-heart" data-liked="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill"
+                    viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                </svg>
+            </div>
+        `);
+    }
+    else {  // liked === false
+        return make_component(`
+            <div class="post-likes-heart" data-liked="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                </svg>
+            </div>
+        `);
+    }
+}
+
+
 function post_component(post) {
     const component = make_component(`
     <div class="post">
@@ -49,39 +75,79 @@ function post_component(post) {
             </div>
 
             <div class="post-likes">
-                <!-- like heart -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart"
-                    viewBox="0 0 16 16">
-                    <path
-                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                </svg>
-                <!-- likes count -->
-                ${post.likes}
+                ${
+                    post.current_user_likes === true ?
+                    like_heart_component(true).outerHTML :
+                    like_heart_component(false).outerHTML
+                }
+                <span class="post-likes-count"> ${post.likes} </span>
             </div>
         </div>
 
         <div class="post-body">
             <div class="post-content">${post.content}</div>
-            
         </div>
     </div>
     `);
-    
+
     // make username navigable
     component.querySelector('.post-username').addEventListener('click', () => {
         load_profile_view(post.user);
     });
 
-    // change heart to filled if post is liked by current user
-    if (post.current_user_likes === true) {
-        component.querySelector('.post-likes svg').replaceWith(make_component(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-        </svg>
-        `));
+
+    // if no user logged in, no further changes needed
+    if (post.current_user_likes === null && post.current_user_owns === null) {
+        return component;
     }
 
-    // add buttons only if current user owns post
+    const like_heart_btn = component.querySelector('.post-likes-heart');
+    const likes_count_div = component.querySelector('.post-likes-count');
+
+    like_heart_btn.addEventListener('click', () => {
+        console.log(`Liking post ${post.id}`);
+        const liked = like_heart_btn.dataset.liked === 'true';
+        const request = new Request(
+            `post/${post.id}`,
+            {
+                method: 'PATCH',
+                headers: { 'X-CSRFToken': get_cookie('csrftoken') },
+                mode: 'same-origin', // Do not send CSRF token to another domain.
+                body: JSON.stringify({
+                    like: !liked
+                })
+            }
+        );
+        fetch(request)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error);
+                    });
+                }
+            })
+            .then(data => {
+                const updated_post = {
+                    ...post,
+                    likes: parseInt(likes_count_div.innerHTML) + (liked ? -1 : 1),
+                    current_user_likes: !liked
+                }
+                component.replaceWith(post_component(updated_post));
+                document.querySelector('#notifications')
+                    .appendChild(notification_component(`${liked ? 'Unliked' : 'Liked'}`));
+            })
+            .catch(error => {
+                console.error(error);
+                document.querySelector('#notifications')
+                    .appendChild(notification_component("Error, please try again."));
+            });
+    });
+
+
+
+    // don't add edit button if current user isn't post creator
     if (post.current_user_owns !== true) {
         return component;
     }
@@ -326,7 +392,6 @@ function profile_component(user, add_follow_btn = false, current_user_following 
     }
 
     // display html formatted 
-    console.log(component.innerHTML);
 
     return component;
 }

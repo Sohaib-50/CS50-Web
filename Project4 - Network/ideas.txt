@@ -1,1 +1,3 @@
 - Use javascript "navigate" to get htmls and render
+- Fix heading imaage and text alignment
+- fix cant like posts on profile page

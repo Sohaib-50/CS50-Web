@@ -1,5 +1,14 @@
 {% extends "network/layout.html" %}
 
+{% block head %}
+<script>
+    //  make log in nav bar active 
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('#nav-register').classList.add('active');
+    });
+</script>
+{% endblock %}
+
 {% block body %}
 
     <h2>Register</h2>

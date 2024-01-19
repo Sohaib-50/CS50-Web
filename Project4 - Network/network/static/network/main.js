@@ -72,13 +72,14 @@ function create_new_post() {
 
         .then(data => {
 
-            // notification
-            document.querySelector('#notifications')
-                .appendChild(notification_component("Post created."));
-
             // add post to DOM
             document.querySelector('#posts')
                 .insertBefore(post_component(data.post), document.querySelector('#posts').firstChild);
+            document.querySelector('#posts').firstChild.classList.add("new-post");
+
+            // notification
+            document.querySelector('#notifications')
+                .appendChild(notification_component("Post created."));
 
             // clear form
             console.log("Clearing form");
@@ -101,7 +102,7 @@ function create_new_post() {
 }
 
 
-function load_posts(posts_page, profile = false, following = null, username = null ) {
+function load_posts(posts_page, profile = false, following = null, username = null) {
     console.log(`Loading ${posts_page.posts.length} posts, profile: ${profile}`);
     const posts_div = profile ? profile_view.querySelector('#posts') : posts_view.querySelector('#posts');
     posts_div.innerHTML = "";  // clear posts
@@ -135,7 +136,6 @@ function load_profile(username) {
 
     // call server to get user details
     const url = `/profile/${username}`;
-
     fetch(url)
         .then(response => {
             if (response.status === 200) {
@@ -199,7 +199,9 @@ function load_posts_view(following = false) {
 }
 
 function load_profile_view(username) {
+
     /* make ui changes */
+
     // views
     posts_view.style.display = "none";
     profile_view.style.display = "block";

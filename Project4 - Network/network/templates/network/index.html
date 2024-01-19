@@ -1,4 +1,11 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
+
+
+{% block head %}
+<script type="module" src="{% static 'network/main.js' %}"></script>
+{% endblock %}
 
 {% block body %}
 
