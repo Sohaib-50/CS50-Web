@@ -1,7 +1,7 @@
 {% extends 'tehreer/layout.html' %}
 
 {% block body %}
-<!-- <style>
+<style>
     .ql-editor p:has(> img) {
         display: flex;
         justify-content: center;
@@ -9,10 +9,33 @@
     .ql-editor img {
         max-width: 70% !important;
     }
-</style> -->
+
+    .django-quill-widget-container {
+        /* shadow */
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+        height: 100vh;
+        
+        /* border-radius: 10px; */
+    }
+
+    .ql-toolbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .django-quill-widget-container > * {
+        border-radius: 10px;
+        border: none !important;
+    }
+</style>
 <form action="{% url 'tehreer:new' %}" method="POST">
     {% csrf_token %}
+    <!-- right alignedno background dark text btn -->
+    <button type="submit" class="btn btn-lg btn-dark  float-right" >Publish</button>
+    <br>
+    <br>
     {{ form.as_p }}
-    <button type="submit" class="btn btn-dark">Add</button>
 </form>
 {% endblock %}
