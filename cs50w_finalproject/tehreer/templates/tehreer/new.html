@@ -1,0 +1,18 @@
+{% extends 'tehreer/layout.html' %}
+
+{% block body %}
+<!-- <style>
+    .ql-editor p:has(> img) {
+        display: flex;
+        justify-content: center;
+    }
+    .ql-editor img {
+        max-width: 70% !important;
+    }
+</style> -->
+<form action="{% url 'tehreer:new' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-dark">Add</button>
+</form>
+{% endblock %}

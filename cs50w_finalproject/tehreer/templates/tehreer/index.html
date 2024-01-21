@@ -1,0 +1,12 @@
+{% extends 'tehreer/layout.html' %}
+
+{% block body %}
+
+{% for article in articles %}
+    <hr>
+    <a href="{% url 'tehreer:article' article.id %}"><h3> {{ article.title }} </h3></a>
+    {{ article.display_body }}
+    <hr>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'tehreer/layout.html' %}
+
+{% block body %}
+<h1>{{ article.title }}</h1>
+<p> {{ article.created_at|date:"F d, Y"}} </p>
+{{ article.body.html|safe }}
+{% endblock %}
