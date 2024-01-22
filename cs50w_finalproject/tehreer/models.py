@@ -245,9 +245,22 @@ class Article(models.Model):
     topics = models.ManyToManyField(Topic, related_name="articles", blank=True)
     likers = models.ManyToManyField(User, related_name="liked_articles", blank=True)
 
-    class Meta:
-        ordering = ["-published_at"] 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        ActivityLog.objects.create(
+            performer=self.author,
+            action_type="post",
+            target_article=self
+        )
 
+    class Meta:
+        ordering = ["-published_at"]
+        indexes = [
+            models.Index(fields=["author"]),
+            models.Index(fields=["title"]),
+            models.Index(fields=["topics"]),
+        ]
+         
     
 class Comment(models.Model):
     article = models.ForeignKey("Article", on_delete=models.CASCADE, related_name="comments")
@@ -258,24 +271,63 @@ class Comment(models.Model):
     class Meta:
         ordering = ["-published_at"]
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        ActivityLog.objects.create(
+            performer=self.author,
+            action_type="comment",
+            target_user=self.article.author,
+            target_article=self.article
+        )
+
 class ActivityLog(models.Model):
-    ACTION_TYPES = [
-        ("comment", "Comment"),
-        ("like", "Like"),
-        ("follow", "Follow"),
-        ("post", "Post")
-    ]
-    action_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="actions")
-    action_for = models.ForeignKey(User, on_delete=models.CASCADE, related_name="actions_for", blank=True, null=True)
-    action_on = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="actions_on", blank=True, null=True)
-    action_type = models.CharField(max_length=10, choices=ACTION_TYPES)
+    ACTION_TYPES = (
+        ("comment", "comment"),
+        ("like", "like"),
+        ("follow", "follow"),
+        ("post", "post")
+    )
+    performer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="actions")
     timestamp = models.DateTimeField(auto_now_add=True)
+    action_type = models.CharField(choices=ACTION_TYPES, max_length=max(len(x[0]) for x in ACTION_TYPES))
+    target_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    target_article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
 
 
-    def __str__(self):
-        return f"{self.action_by} {self.action_type}d"
+# from django.db.models import Q
+# user = request.user
+
+# To get updates of current users followings posting articles:
+# ActivityLog.Objects.filter(performer__in=request.user.followings.all(), action_type="post")
     
-    class Meta:
-        ordering = ["-timestamp"]
-
+# to get updates of current user's articles getting likes
+# ActivityLog.Objects.filter(action_type='like', target_article__in=user.articles.all())
     
+# To get updates of current user's articles getting comments
+# ActivityLog.Objects.filter(action_type='comment', target_article__in=user.articles.all())
+    
+# To get updates of current user getting a follow
+# ActivityLog.Objects.filter(target_user=user, action_type="follow")
+    
+# combine query 2 and 3:
+# ActivityLog.Objects.filter(action_type__in=['comment', 'like'], target_article__in=user.articles.all())
+    
+# combine all
+# user_updates = ActivityLog.objects.filter(
+#     Q(action_type='like', target_article__in=user.articles.all()) |
+#     Q(performer__in=request.user.followings.all(), action_type="post") |
+#     Q(action_type='comment', target_article__in=user.articles.all()) |
+#     Q(target_user=user, action_type="follow")
+#   )
+
+# further refine:
+#  user_updates = ActivityLog.objects.filter(
+#     Q(performer__in=request.user.followings.all(), action_type="post") |
+#     Q(action_type__in=['like', 'comment'], target_article__in=user.articles.all()) |
+#     Q(target_user=user, action_type="follow")
+#   )
+    
+# # further refine, final form:
+# user_updates = ActivityLog.objects.filter(
+#     Q(target_user=user) | Q(target_article__in=user.articles.all())
+# )
