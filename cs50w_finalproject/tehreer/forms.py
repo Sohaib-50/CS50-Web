@@ -5,11 +5,11 @@ class ArticleForm(forms.ModelForm):
     
     class Meta:
         model = Article
-        fields = ("title", "body")
+        fields = ("title", "content")
 
-        # remove label for body field
+        # remove labels
         labels = {
-            "body": "",
+            "content": "",
             "title": ""
         }
 

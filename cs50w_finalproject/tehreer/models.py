@@ -1,6 +1,7 @@
-from django.db import models
-from django_quill.fields import QuillField
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.db.models import Q
+from django_quill.fields import QuillField
 
 '''
 # schema.sql:
@@ -215,7 +216,34 @@ class User(AbstractUser):
     # fields defined in schema but not here because they are already defined in AbstractUser:
     # email, password, firstname, lastname
 
-    # usage:
+    def follow(self, user):
+        self.followings.add(user)
+
+        # log follow
+        ActivityLog.objects.create(
+            performer=self,
+            action_type="follow",
+            target_user=user
+        )
+
+    def unfollow(self, user):
+        self.followings.remove(user)
+
+        # unlog associated follow
+        ActivityLog.objects.filter(
+            performer=self,
+            action_type="follow",
+            target_user=user
+        ).delete()
+
+    def get_updates(self):
+        return ActivityLog.objects.filter(
+            Q(target_user=self, action_type__in=['like', 'comment', 'follow'])
+            |
+            Q(performer__in=self.followings.all(), action_type="post")
+        )
+
+    # usage examples:
     # Create a user (email, password, firstname, lastname):
     # >>> from django.contrib.auth.models import User 
     # >>> user = User.objects.create_user(email='user@example', password='pass', firstname='first', lastname='last')
@@ -245,20 +273,74 @@ class Article(models.Model):
     topics = models.ManyToManyField(Topic, related_name="articles", blank=True)
     likers = models.ManyToManyField(User, related_name="liked_articles", blank=True)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    def like(self, user):
+        self.likers.add(user)
+
+        # log like
         ActivityLog.objects.create(
-            performer=self.author,
-            action_type="post",
+            performer=user,
+            action_type="like",
+            target_user=self.author,
             target_article=self
         )
+
+    def unlike(self, user):    
+        self.likers.remove(user)
+        
+        # unlog associated like
+        ActivityLog.objects.filter(
+            performer=user,
+            action_type="like",
+            target_user=self.author,
+            target_article=self
+        ).delete()
+
+    def add_comment(self, user, content):
+        comment = Comment.objects.create(article=self, author=user, content=content)
+
+        # log comment
+        ActivityLog.objects.create(
+            performer=user,
+            action_type="comment",
+            target_user=self.author,
+            target_article=self
+        )
+
+        return comment
+    
+
+    def remove_comment(self, comment):
+        comment_author = comment.author
+        comment.delete()
+
+        # unlog associated comment
+        ActivityLog.objects.filter(
+            performer=comment_author,
+            action_type="comment",
+            target_user=self.author,
+            target_article=self
+        ).delete()
+
+    def save(self, *args, **kwargs):
+
+        being_created = self._state.adding == True
+
+        super().save(*args, **kwargs)
+
+        ## activity log update
+        # if article is being created, not updated
+        if being_created:
+            ActivityLog.objects.create(
+                performer=self.author,
+                action_type="post",
+                target_article=self
+            )
 
     class Meta:
         ordering = ["-published_at"]
         indexes = [
             models.Index(fields=["author"]),
-            models.Index(fields=["title"]),
-            models.Index(fields=["topics"]),
+            models.Index(fields=["title"])
         ]
          
     
@@ -271,14 +353,6 @@ class Comment(models.Model):
     class Meta:
         ordering = ["-published_at"]
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        ActivityLog.objects.create(
-            performer=self.author,
-            action_type="comment",
-            target_user=self.article.author,
-            target_article=self.article
-        )
 
 class ActivityLog(models.Model):
     ACTION_TYPES = (
@@ -292,6 +366,35 @@ class ActivityLog(models.Model):
     action_type = models.CharField(choices=ACTION_TYPES, max_length=max(len(x[0]) for x in ACTION_TYPES))
     target_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     target_article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+
+        # delete previous logs of same action if present, bec we want to mark only latest one
+        ActivityLog.objects.filter(
+            performer=self.performer,
+            action_type=self.action_type,
+            target_user=self.target_user,
+            target_article=self.target_article
+        ).delete()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        if self.action_type == "post":
+            return f"{self.performer} posted an article {self.target_article.title}"
+        elif self.action_type == "like":
+            return f"{self.performer} liked article '{self.target_article.title}' by {self.target_user}"
+        elif self.action_type == "comment":
+            return f"{self.performer} commented on {self.target_article.title} by {self.target_user}"
+        elif self.action_type == "follow":
+            return f"{self.performer} followed {self.target_user}"
+    
+    class Meta:
+        ordering = ["-timestamp"]
+        indexes = [
+            models.Index(fields=["performer"]),
+            models.Index(fields=["target_user"]),
+        ]
+        
 
 
 # from django.db.models import Q
@@ -330,4 +433,10 @@ class ActivityLog(models.Model):
 # # further refine, final form:
 # user_updates = ActivityLog.objects.filter(
 #     Q(target_user=user) | Q(target_article__in=user.articles.all())
+# )
+
+# Better, best USE THIS!!!
+# user_updates = ActivityLog.objects.filter(
+#     Q(target_user=user, action_type__in=['like', 'comment', 'follow'])
+    # | Q(perfomer__in=user.followings.all(), action_type="post")
 # )
