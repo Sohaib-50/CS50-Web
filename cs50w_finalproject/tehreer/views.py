@@ -5,4 +5,4 @@ from .forms import ArticleForm
 from django.utils.html import strip_tags, strip_spaces_between_tags
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the tehreer index.")
+    return render(request, 'tehreer/index.html')
