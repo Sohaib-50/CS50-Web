@@ -337,7 +337,7 @@ class Article(models.Model):
             )
 
     class Meta:
-        ordering = ["-published_at"]
+        ordering = ["-published_at", "-id"]
         indexes = [
             models.Index(fields=["author"]),
             models.Index(fields=["title"])
@@ -389,7 +389,7 @@ class ActivityLog(models.Model):
             return f"{self.performer} followed {self.target_user}"
     
     class Meta:
-        ordering = ["-timestamp"]
+        ordering = ["-timestamp", "-id"]
         indexes = [
             models.Index(fields=["performer"]),
             models.Index(fields=["target_user"]),
