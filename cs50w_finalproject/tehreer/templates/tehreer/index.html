@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'tehreer/styles/main.css' %}">
 
     <!-- scripts -->
-    <script src="{% static 'tehreer/scripts/main.js' %}"></script>
+    <script type="module" src="{% static 'tehreer/scripts/main.js' %}"></script>
 
     <title>Tehreer</title>
 
@@ -21,9 +21,9 @@
 <body>
 
     <header>
-        <div id="header-title">
-            <h1>Tehreer</h1>
-        </div>
+        <a id="header-title" href="{% url 'tehreer:index' %}">
+            Tehreer
+        </a>
 
         <div>
             <search>
@@ -57,6 +57,7 @@
                                 d="M17.5 4.5l-8.46 8.46a.25.25 0 0 0-.06.1l-.82 2.47c-.07.2.12.38.31.31l2.47-.82a.25.25 0 0 0 .1-.06L19.5 6.5m-2-2l2.32-2.32c.1-.1.26-.1.36 0l1.64 1.64c.1.1.1.26 0 .36L19.5 6.5m-2-2l2 2"
                                 stroke="currentColor"></path>
                         </svg>
+                        <span> Write </span>
                     </a>
                 </li>
 
@@ -70,6 +71,7 @@
                                 stroke="currentColor" stroke-linejoin="round">
                             </path>
                         </svg>
+                        <span> Notifications </span>
                     </a>
                 </li>
 
@@ -83,7 +85,7 @@
                                     stroke="currentColor" stroke-linecap="round"></path>
                             </svg>
                         </div>
-                        Profile
+                        <span> Profile </span>
                     </a>
                 </li>
             </ul>
@@ -92,9 +94,31 @@
 
     <main>
 
-        <section>
+        <aside id="article-left">
+            <div id="article-title">
+                <h1> GitHub Copilot Labs — Get Explanations and Translate Code </h1>
+            </div>
 
-        </section>
+            <div id="article-date"> January 10 2024 </div>
+            <div id="article-topics">
+                <a href="#">Programming</a>
+                <a href="#">Github</a>
+                <a href="#">AI</a>
+            </div>
+
+            <div id="article-author">
+                Written by
+                <div id="#author-info">
+                    <div id="author-name">
+                        <a href="#">Sakib Sami</a>
+                    </div>
+                    <div id="author-image">
+                        <img src="https://miro.medium.com/v2/resize:fill:88:88/1*ZTU6cfaLOh0J3DpCALyYNA.jpeg">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
 
         <article>
             <p><img src="https://miro.medium.com/v2/resize:fit:467/1*xqUjF1sijiXlmFK5GNsBzg.png"></p>
@@ -128,11 +152,60 @@
                     width="600"></p>
         </article>
 
-        <section>
-        </section>
+        <aside id="article-right">
+            <div id="article-stats">
+                <div id="article-stats-views">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-label="Views">
+                        <path
+                            d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zm0 1a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zm0 1a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm0 1a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 1a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 1a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zm0 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"
+                            fill="currentColor"></path>
+                    </svg>
+                    <span> 1.2K </span>
+                </div>
+                <div id="article-stats-read-time">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-label="Read Time">
+                        <path d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zm0 1a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1
+                            0-13zm0 1a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm0 1a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1
+
+                            0-9zm0 1a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 1a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1
+
+                            0-5zm0 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="currentColor"></path>
+                    </svg>
+                    <span> 5 min read </span>
+                </div>
+            </div>
+
+            <div id="article-reactions">
+                <div id="article-reactions-like">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-label="Like">
+                        <path d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zm0 1a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1
+                            0-13zm0 1a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm0 1a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1
+
+                            0-9zm0 1a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 1a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1
+
+                            0-5zm0 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="currentColor"></path>
+                    </svg>
+                    <span> 1.2K </span>
+                </div>
+                <div id="article-reactions-dislike">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-label="Dislike">
+                        <path d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zm0 1a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0
+                            1 0-13zm0 1a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm0 1a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0
+
+                            1 0-9zm0 1a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 1a2.5 2.5 0 1 1 0 5 2.5 2.5 0
+
+                            0 1 0-5zm0 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="currentColor"></path>
+                    </svg>
+                    <span> 1.2K </span>
+                </div>
+            </div>
+
+            
+
+        </aside>
 
 
-    </main> -->
+    </main>
 
 </body>
 

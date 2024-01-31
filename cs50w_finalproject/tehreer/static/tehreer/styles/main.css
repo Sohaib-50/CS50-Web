@@ -3,12 +3,15 @@
 
 :root {
     --primary-color: rgb(106, 91, 205);
+    --primary-color-light: rgb(106, 91, 205, 0.5);
+    --primary-color-lighter: rgb(106, 91, 205, 0.2);
 }
 
 * {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
 }
 
 header {
@@ -20,20 +23,28 @@ header {
     position: sticky;
     top: 0;
     left: 0;
-    right: 0;
     z-index: 100;
     background-color: white;
+    transition: top 0.3s;
 
     /* bottom shadow */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 
 }
 
-header>* {
+header > * {
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: nowrap;
+
+}
+
+#header-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
 
 }
 
@@ -45,6 +56,15 @@ nav {
 nav a {
     text-decoration: none;
     color: black;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+nav a span {
+    font-size: 0.7rem;
 }
 
 nav li {
@@ -53,7 +73,7 @@ nav li {
 
 nav li:hover {
     color: var(--primary-color);
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 nav ul {
@@ -62,15 +82,20 @@ nav ul {
     align-items: center;
     justify-content: space-between;
     flex-wrap: nowrap;
-    gap: 10px;
+    gap: 20px;
 }
 
 nav button#nav-collapse {
     display: none;
 }
 
-
+/* for collapsable nav */
 @media screen and (max-width: 768px) {
+
+    nav a {
+        flex-direction: column;
+    }
+
     nav button#nav-collapse {
         display: block;
         background-color: transparent;
@@ -83,12 +108,11 @@ nav button#nav-collapse {
         display: none;
         flex-direction: column;
         position: absolute;
-        top: 38px;
-        right: calc(10% - 20px);
-        /* 10% is header padding, 10px is ul padding */
+        top: 40px;
+        right: calc(10% - 15px - 20px); /* 10% is header padding, 15px is ul padding, extra 20px for width of text */
         background-color: white;
         z-index: 99;
-        padding: 15px 20px;
+        padding: 15px;
         gap: 20px;
         border-radius: 30px;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -106,6 +130,7 @@ nav button#nav-collapse {
         animation-duration: 0.2s;
         animation-fill-mode: forwards;
     }
+
 }
 
 @keyframes slide-down {
@@ -132,7 +157,7 @@ nav button#nav-collapse {
         transform: translateY(-10px);
         opacity: 0;
     }
-    
+
     100% {
         display: none;
     }
@@ -157,4 +182,119 @@ search>input {
     border: none;
     outline: none;
     width: 100%;
+}
+
+
+#article-left, #article-right {
+    color: rgb(100, 100, 100);
+    font-size: 0.8rem;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 40px 20px;
+}
+
+#article-left, #article-right {
+    width: 18%;
+    position: sticky;
+    top: 10%;
+    height: fit-content;
+}
+
+article {
+    flex: 1;
+    padding: 0 40px;
+    text-align: justify;
+}
+
+
+/* for article layout responsiveness */
+@media screen and (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    #article-left, #article-right {
+        width: 100%;
+        position: relative;
+        top: 0;
+        height: fit-content;
+    }
+
+    #article-left {
+        margin-bottom: 20px;
+    }
+
+    #article-right {
+        margin-top: 20px;
+    }
+
+    article {
+        padding: 0;
+    }
+
+}
+
+
+article p:has(img) {
+    text-align: center;
+}
+
+article img {
+    max-width: 90%;
+    max-height: 90%;
+
+}
+
+#article-left #article-title h1 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+}
+
+#article-left #article-topics {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#article-left #article-topics a {
+    text-decoration: none;
+    color: black;
+    background-color: var(--primary-color-lighter);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-align: center;
+    width: fit-content;
+}
+
+#article-left #article-topics a:hover, 
+#article-left #article-topics a:active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#article-left #article-author {
+    border-top: 1px solid var(--primary-color-light);
+    border-bottom: 1px solid var(--primary-color-light);
+}
+
+#article-left #article-author #author-info {
+    display: flex;
+    flex-direction: row;
+}
+
+#article-left #article-author #author-image img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+
 }
