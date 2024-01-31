@@ -10,6 +10,9 @@
     <!-- custom styles -->
     <link rel="stylesheet" href="{% static 'tehreer/styles/main.css' %}">
 
+    <!-- scripts -->
+    <script src="{% static 'tehreer/scripts/main.js' %}"></script>
+
     <title>Tehreer</title>
 
 
@@ -34,9 +37,16 @@
         </div>
 
         <nav>
-            <ul>
+            <button id="nav-collapse" aria-label="Menu">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-label="Menu">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M3 6.5a.5.5 0 0 1 .5-.5h17a.5.5 0 0 1 0 1h-17a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h17a.5.5 0 0 1 0 1h-17a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h17a.5.5 0 0 1 0 1h-17a.5.5 0 0 1-.5-.5z"
+                        fill="currentColor"></path>
+                </svg>
+            </button>
 
-                <!-- New Article -->
+            <ul class="collapsed">
+                <!-- New Article Page -->
                 <li>
                     <a href="#">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-label="Write">
@@ -50,7 +60,7 @@
                     </a>
                 </li>
 
-                <!-- Notifications -->
+                <!-- Notifications Page -->
                 <li>
                     <a href="#">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-label="Notifications">
@@ -63,25 +73,30 @@
                     </a>
                 </li>
 
-                <!-- Profile -->
+                <!-- Profile Page -->
                 <li>
                     <a href="#">
-                        <div id="profile-picture">
+                        <div id="nav-profile">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-label="Profile">
                                 <circle cx="12" cy="7" r="4.5" stroke="currentColor"></circle>
                                 <path d="M3.5 21.5v-4.34C3.5 15.4 7.3 14 12 14s8.5 1.41 8.5 3.16v4.34"
                                     stroke="currentColor" stroke-linecap="round"></path>
                             </svg>
                         </div>
+                        Profile
                     </a>
+                </li>
             </ul>
         </nav>
     </header>
 
     <main>
+
+        <section>
+
+        </section>
+
         <article>
-            <div id="article-title">GitHub Copilot Labs — Get Explanations and Translate Code</div>
-            <p> January 21, 2024 </p>
             <p><img src="https://miro.medium.com/v2/resize:fit:467/1*xqUjF1sijiXlmFK5GNsBzg.png"></p>
             <p>If you're a programmer, you most probably know about or have heard of GitHub Copilot, the incredibly
                 powerful AI autocomplete tool.&nbsp;But there are a couple of experimental features of Copilot that come
@@ -100,8 +115,7 @@
                 block of code you want the explanation for, choose one of the options for the type of explanation from
                 the dropdown menu, and then click “Ask Copilot” under the “explain” tab to get the explanation.</p>
             <p><br></p>
-            <p><img src="https://miro.medium.com/v2/resize:fit:400/1*EJj5YSJYflcTUl7r77NiFw.gif" height=""
-                    width=""></p>
+            <p><img src="https://miro.medium.com/v2/resize:fit:400/1*EJj5YSJYflcTUl7r77NiFw.gif" height="" width=""></p>
             <p><br></p>
             <p><br></p>
             <h1>The “Language Translation” Feature</h1>
@@ -112,9 +126,13 @@
             <p><br></p>
             <p><img src="https://miro.medium.com/v2/resize:fit:400/1*OYbkUnhf-pU9Fq0BF5TcDw.gif" height="338"
                     width="600"></p>
-
         </article>
-    </main>
+
+        <section>
+        </section>
+
+
+    </main> -->
 
 </body>
 
