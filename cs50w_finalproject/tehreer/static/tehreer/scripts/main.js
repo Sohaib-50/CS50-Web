@@ -1,13 +1,17 @@
-import { handle_header_scroll_visibility } from "./helpers.js";
+import { handle_header_scroll_visibility, toggle_nav_collapse } from "./helpers.js";
+import { Articles } from "./components/articles.js"
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector("button#nav-collapse").addEventListener("click", toggle_collapsed_nav);
+document.addEventListener("DOMContentLoaded", initial_setup);
 
+function initial_setup() {
+
+    document.querySelector("button#nav-collapse").addEventListener("click", toggle_nav_collapse);
     handle_header_scroll_visibility();
-});
 
-
-function toggle_collapsed_nav() {
-    let nav = document.querySelector("nav ul");
-    nav.classList.toggle("collapsed");
+    const all_articles = 
+    document.querySelector('main').appendChild(articles);
 }
+
+
+
+
