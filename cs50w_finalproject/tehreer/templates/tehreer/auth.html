@@ -1,0 +1,40 @@
+{% extends "tehreer/layout.html" %}
+{% load static %}
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'tehreer/styles/auth.css' %}">
+{% endblock %}
+
+
+
+{% block main %}
+
+<div id="signup">
+    <h2>Sign Up</h2>
+
+    <form action="{% url 'tehreer:auth' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ signupform }}
+        <!-- <input autofocus class="auth-textual-input" type="text" name="username" placeholder="Username" required>
+        <input class="auth-textual-input" type="password" name="password" placeholder="Password" required>
+
+        <input class="auth-textual-input" type="text" name="first_name" placeholder="First Name" required>
+        <input class="auth-textual-input" type="text" name="last_name" placeholder="Last Name" required>
+        <input class="auth-textual-input" type="email" name="email" placeholder="Email" required>
+        <textarea class="auth-textual-input" name="bio" placeholder="Bio" rows="4"></textarea>
+        <input class="auth-file-input" type="file" name="profile_picture"> -->
+
+        <input class="auth-button-input" type="submit" value="Sign Up">
+    </form>
+
+    <p>Already have an account? <a href="{% url 'tehreer:auth' %}">Sign In</a></p>
+</div>
+
+
+
+
+
+{% endblock %}

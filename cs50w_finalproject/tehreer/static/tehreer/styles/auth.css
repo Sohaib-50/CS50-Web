@@ -1,0 +1,77 @@
+:root {
+    --primary-color: rgb(96, 5, 106);
+    --primary-color-light: rgb(96, 5, 106, 0.8);
+    --primary-color-lighter: rgb(96, 5, 106, 0.5);
+    --primary-color-lightest: rgb(96, 5, 106, 0.2);
+
+    --secondary-color: rgb(203, 144, 170);
+    --secondary-color-light: rgb(203, 144, 170, 0.8);
+    --tertiary-color: rgb(45, 47, 52);
+}
+
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#signin,
+#signup {
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0 0 4px var(--primary-color-lightest);
+    padding: 2% 9%;
+    /* height: 60%; */
+    display: grid;
+    grid-template-rows: auto 2fr auto;
+    gap: 20px;
+}
+
+
+h2 {
+    color: var(--primary-color);
+    width: 100%;
+    padding: 8px 0;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+#signin form,
+#signup form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.auth-textual-input {
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid var(--secondary-color);
+    padding: 10px;
+}
+
+.auth-button-input {
+    width: fit-content;
+    padding: 9px 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--primary-color-light);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+
+
+.auth-button-input:hover {
+    background-color: var(--primary-color);
+}
+
+.auth-textual-input:active, .auth-textual-input:focus {  
+    outline: none;
+}  

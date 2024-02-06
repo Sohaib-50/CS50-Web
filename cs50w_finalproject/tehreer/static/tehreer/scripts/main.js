@@ -8,7 +8,7 @@ function initial_setup() {
     document.querySelector("button#nav-collapse").addEventListener("click", toggle_nav_collapse);
     handle_header_scroll_visibility();
 
-    const all_articles = 
+    // const all_articles = 
     document.querySelector('main').appendChild(articles);
 }
 

@@ -108,9 +108,9 @@ class TestTehreer(TestCase):
         self.assertEqual(comment1.content, 'Comment 1')
         self.assertEqual(comment1.article, article)
 
-        comments = article.comments.all()
 
         # check ordering
+        comments = article.comments.all()
         self.assertEqual(comments[0], comment1)
         self.assertEqual(comments[1], comment0)
 

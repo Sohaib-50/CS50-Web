@@ -1,5 +1,16 @@
 from django import forms
-from .models import Article
+from .models import User, Article
+from django.contrib.auth.forms import UserCreationForm
+
+class SignUpForm(UserCreationForm):
+    # email = forms.EmailField(max_length=254, help_text='Required. Enter a valid email address.')
+    # bio = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
+    # profile_picture = forms.ImageField(required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'bio', 'profile_picture')
+
 
 class ArticleForm(forms.ModelForm):
     
@@ -14,7 +25,6 @@ class ArticleForm(forms.ModelForm):
         }
 
         widgets = {
-            # large title input, label and box center
             "title": forms.TextInput(attrs={
                 "class": "form-control form-control-lg",
                 "placeholder": "Title",
