@@ -4,6 +4,7 @@
 
 
 {% block head %}
+<script type="module" src="{% static 'tehreer/scripts/auth.js' %}"></script>
 <link rel="stylesheet" href="{% static 'tehreer/styles/auth.css' %}">
 {% endblock %}
 
@@ -11,30 +12,77 @@
 
 {% block main %}
 
-<div id="signup">
-    <h2>Sign Up</h2>
+<div id="signin">
+    <h2>Sign In</h2>
+
+    <form action="{% url 'tehreer:auth' %}" method="post">
+        {% csrf_token %}
+
+        <div class="form-field">
+            <label for="email">Email</label>
+            <input class="auth-textual-input" type="email" name="email" placeholder="Email" required autocomplete="email">
+        </div>
+
+        <div class="form-field">
+            <label for="password">Password</label>
+            <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="current-password">
+        </div>
+
+        <input class="auth-button-input" type="submit" value="Sign In">
+    </form>
+
+    <p>Don't have an account? <a class="auth_toggler">Sign Up</a></p>
+</div>
+
+<div id="signup" style="display: none;">
+    <h2> Sign Up </h2>
 
     <form action="{% url 'tehreer:auth' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{ signupform }}
-        <!-- <input autofocus class="auth-textual-input" type="text" name="username" placeholder="Username" required>
-        <input class="auth-textual-input" type="password" name="password" placeholder="Password" required>
+        <div class="form-field">
+            <label for="email">Email *</label>
+            <input class="auth-textual-input" type="email" name="email" placeholder="Email" required autocomplete="off">
+        </div>
 
-        <input class="auth-textual-input" type="text" name="first_name" placeholder="First Name" required>
-        <input class="auth-textual-input" type="text" name="last_name" placeholder="Last Name" required>
-        <input class="auth-textual-input" type="email" name="email" placeholder="Email" required>
-        <textarea class="auth-textual-input" name="bio" placeholder="Bio" rows="4"></textarea>
-        <input class="auth-file-input" type="file" name="profile_picture"> -->
+        <div class="form-fields-row">
+            <div class="form-field">
+                <label for="first_name">First Name *</label>
+                <input class="auth-textual-input" type="text" name="first_name" placeholder="First Name" required autocomplete="given-name">
+            </div>
+
+            <div class="form-field">
+                <label for="last_name">Last Name *</label>
+                <input class="auth-textual-input" type="text" name="last_name" placeholder="Last Name" required autocomplete="family-name">
+            </div>
+        </div>
+
+        <div class="form-fields-row">
+            <div class="form-field">
+                <label for="password">Password *</label>
+                <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="off">
+            </div>
+
+            <div class="form-field">
+                <label for="password2">Confirm Password *</label>
+                <input class="auth-textual-input" type="password" name="password2" placeholder="Password Again" required autocomplete="off">
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="bio">Bio (optional) </label>
+            <textarea class="auth-textual-input" name="bio" placeholder="Bio" rows="4"></textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="profile_picture">Profile Picture (optional)</label>
+            <input class="auth-file-input" type="file" name="profile_picture">
+        </div>
 
         <input class="auth-button-input" type="submit" value="Sign Up">
     </form>
 
-    <p>Already have an account? <a href="{% url 'tehreer:auth' %}">Sign In</a></p>
+    <p>Already have an account? <a class="auth_toggler">Sign In</a></p>
 </div>
-
-
-
-
 
 {% endblock %}
