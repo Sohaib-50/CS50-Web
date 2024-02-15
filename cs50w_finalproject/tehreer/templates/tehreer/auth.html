@@ -11,12 +11,18 @@
 
 
 {% block main %}
-
-<div id="signin">
+<div id="signin"  {% if focus_signup %} style="display: none;" {% endif %}>
     <h2>Sign In</h2>
+
+    {% if auth_message and not focus_signup %}
+        <div class="auth_message">{{ auth_message }}</div>
+    {% endif %}
 
     <form action="{% url 'tehreer:auth' %}" method="post">
         {% csrf_token %}
+        
+        <input type="text" value="signin" name="auth_type" hidden>
+
 
         <div class="form-field">
             <label for="email">Email</label>
@@ -34,11 +40,18 @@
     <p>Don't have an account? <a class="auth_toggler">Sign Up</a></p>
 </div>
 
-<div id="signup" style="display: none;">
+<div id="signup" {% if not focus_signup %} style="display: none;" {% endif %}>
     <h2> Sign Up </h2>
+
+    {% if auth_message and focus_signup %}
+        <div class="auth_message">{{ auth_message }}</div>
+    {% endif %}
+
 
     <form action="{% url 'tehreer:auth' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+        <input type="text" value="signup" name="auth_type" hidden>
 
         <div class="form-field">
             <label for="email">Email *</label>
@@ -60,12 +73,12 @@
         <div class="form-fields-row">
             <div class="form-field">
                 <label for="password">Password *</label>
-                <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="off">
+                <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="off" minlength="4">
             </div>
 
             <div class="form-field">
                 <label for="password2">Confirm Password *</label>
-                <input class="auth-textual-input" type="password" name="password2" placeholder="Password Again" required autocomplete="off">
+                <input class="auth-textual-input" type="password" name="password2" placeholder="Password Again" required autocomplete="off" minlength="4">
             </div>
         </div>
 

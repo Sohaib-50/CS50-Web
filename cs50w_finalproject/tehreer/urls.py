@@ -4,7 +4,7 @@ from . import views
 app_name = "tehreer"
 urlpatterns = [
     path("", views.index, name="index"),
-    path("auth", views.auth, name="auth")
+    path("auth/", views.auth, name="auth")
 
     # # Auth APIs
     # path("api/auth/signup", views.register, name="signup"),

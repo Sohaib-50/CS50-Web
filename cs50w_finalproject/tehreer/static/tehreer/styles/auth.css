@@ -112,3 +112,9 @@ h2 {
 .auth-textual-input:active, .auth-textual-input:focus {  
     outline: none;
 }  
+
+.auth_message {
+    font-size: 0.8rem;
+    text-align: center; 
+    text-decoration: underline;
+}
