@@ -1,6 +1,32 @@
 from django import forms
 from .models import User, Article
+from django.contrib.auth.forms import UserCreationForm
 
+
+
+class SignupForm(forms.ModelForm):
+
+    password2 = forms.CharField()
+    
+
+    class Meta:
+        model = User
+        fields = ['email', 'password', 'password2', 'first_name', 'last_name', 'bio', 'profile_picture']
+
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+        if len(password1) < 4:
+            raise forms.ValidationError("Password must be at least 4 characters long.")
+        return password1
+
+    def clean_password2(self):
+        password2 = self.cleaned_data.get('password2')
+        if len(password2) < 4:
+            raise forms.ValidationError("Password must be at least 4 characters long.")
+        return password2
+    
+    
 class ArticleForm(forms.ModelForm):
     
     class Meta:

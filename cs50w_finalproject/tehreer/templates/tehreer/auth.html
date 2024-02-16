@@ -18,7 +18,7 @@
         <div class="auth_message">{{ auth_message }}</div>
     {% endif %}
 
-    <form action="{% url 'tehreer:auth' %}" method="post">
+    <form action="{% url 'tehreer:signin' %}" method="post">
         {% csrf_token %}
         
         <input type="text" value="signin" name="auth_type" hidden>
@@ -48,7 +48,7 @@
     {% endif %}
 
 
-    <form action="{% url 'tehreer:auth' %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'tehreer:signup' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <input type="text" value="signup" name="auth_type" hidden>
@@ -73,7 +73,7 @@
         <div class="form-fields-row">
             <div class="form-field">
                 <label for="password">Password *</label>
-                <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="off" minlength="4">
+                <input class="auth-textual-input" type="password" name="password1" placeholder="Password" required autocomplete="off" minlength="4">
             </div>
 
             <div class="form-field">
