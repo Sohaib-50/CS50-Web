@@ -1,1 +1,9 @@
 1. Share feature
+2. refactor common styles eg class for color primary class for border radius 20 etc.
+3. Use UserCreationForm for better auth checking
+TODOS:
+- Project simplify
+    - learn routing history, think how to use here.
+    - just see logic of network app and reimplement
+    - start with login logout
+

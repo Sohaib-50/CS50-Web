@@ -15,8 +15,8 @@ function handle_header_scroll_visibility() {
 }
 
 function toggle_nav_collapse() {
-    let nav = document.querySelector("nav ul");
-    nav.classList.toggle("collapsed");
+    let nav_ul = document.querySelector("nav ul");
+    nav_ul.classList.toggle("collapsed");
 }
 
 

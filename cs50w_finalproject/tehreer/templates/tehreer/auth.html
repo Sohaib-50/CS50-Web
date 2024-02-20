@@ -1,0 +1,107 @@
+{% extends "tehreer/layout.html" %}
+{% load static %}
+
+
+
+{% block head %}
+<script type="module" src="{% static 'tehreer/scripts/auth.js' %}"></script>
+<link rel="stylesheet" href="{% static 'tehreer/styles/auth.css' %}">
+{% endblock %}
+
+
+
+{% block main %}
+<div id="signin"  {% if focus_signup %} style="display: none;" {% endif %}>
+    <h2>Sign In</h2>
+
+    {% if auth_message and not focus_signup %}
+        <div class="auth_message">{{ auth_message }}</div>
+    {% endif %}
+
+    <form action="{% url 'tehreer:signin' %}" method="post">
+        {% csrf_token %}
+        
+        <input type="text" value="signin" name="auth_type" hidden>
+
+
+        <div class="form-field">
+            <label for="email">Email</label>
+            <input class="auth-textual-input" type="email" name="email" placeholder="Email" required autocomplete="email">
+        </div>
+
+        <div class="form-field">
+            <label for="password">Password</label>
+            <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="current-password">
+        </div>
+
+        <input class="auth-button-input" type="submit" value="Sign In">
+    </form>
+
+    <p>Don't have an account? <a class="auth_toggler">Sign Up</a></p>
+</div>
+
+<div id="signup" {% if not focus_signup %} style="display: none;" {% endif %}>
+    <h2> Sign Up </h2>
+
+    {% if auth_messages and focus_signup %}
+        <ul class="auth_messages">
+            {% for auth_message in auth_messages %}
+                <li class="auth_message">
+                    {{ auth_message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+    <form action="{% url 'tehreer:signup' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="text" value="signup" name="auth_type" hidden>
+
+        <div class="form-field">
+            <label for="email">Email *</label>
+            <input class="auth-textual-input" type="email" name="email" placeholder="Email" required autocomplete="off" value="{{ signup_form.email.value|default:'' }}">
+        </div>
+
+        <div class="form-fields-row">
+            <div class="form-field">
+                <label for="first_name">First Name *</label>
+                <input class="auth-textual-input" type="text" name="first_name" placeholder="First Name" required autocomplete="given-name" value="{{ signup_form.first_name.value|default:'' }}">
+            </div>
+
+            <div class="form-field">
+                <label for="last_name">Last Name *</label>
+                <input class="auth-textual-input" type="text" name="last_name" placeholder="Last Name" required autocomplete="family-name" value="{{ signup_form.last_name.value|default:'' }}">
+            </div>
+        </div>
+
+        <div class="form-fields-row">
+            <div class="form-field">
+                <label for="password">Password *</label>
+                <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="off" minlength="4">
+            </div>
+
+            <div class="form-field">
+                <label for="password2">Confirm Password *</label>
+                <input class="auth-textual-input" type="password" name="password2" placeholder="Password Again" required autocomplete="off" minlength="4">
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="bio">Bio (optional) </label>
+            <textarea class="auth-textual-input" name="bio" placeholder="Bio" rows="4">{{ signup_form.bio.value|default:'' }}</textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="profile_picture">Profile Picture (optional)</label>
+            <input class="auth-file-input" type="file" name="profile_picture">
+        </div>
+
+        <input class="auth-button-input" type="submit" value="Sign Up">
+    </form>
+
+    <p>Already have an account? <a class="auth_toggler">Sign In</a></p>
+</div>
+
+{% endblock %}

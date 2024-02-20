@@ -4,7 +4,9 @@ from . import views
 app_name = "tehreer"
 urlpatterns = [
     path("", views.index, name="index"),
-    path("article", views.article, name="article")
+    path("auth/", views.auth, name="auth"),
+    path("signup/", views.signup, name="signup"),
+    path("signin/", views.signin, name="signin")
 
     # # Auth APIs
     # path("api/auth/signup", views.register, name="signup"),
