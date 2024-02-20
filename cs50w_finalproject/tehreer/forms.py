@@ -13,6 +13,17 @@ class SignupForm(forms.ModelForm):
         model = User
         fields = ['email', 'password', 'password2', 'first_name', 'last_name', 'bio', 'profile_picture']
 
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        self.validate_password_match(password, password2)
+
+    def validate_password_match(self, password, password2):
+        if password and password2 and password != password2:
+            raise forms.ValidationError("Passwords do not match.")
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
@@ -26,16 +37,17 @@ class SignupForm(forms.ModelForm):
             raise forms.ValidationError("Password must be at least 4 characters long.")
         return password2
     
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password2 = cleaned_data.get('password2')
-
-        self.validate_password_match(password, password2)
-
-    def validate_password_match(self, password, password2):
-        if password and password2 and password != password2:
-            raise forms.ValidationError("Passwords do not match.")
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not all(char.isalpha() for char in first_name):
+            raise forms.ValidationError("First name can't have numbers or special characters.")
+        return first_name.capitalize()
+    
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not all(char.isalpha() for char in last_name):
+            raise forms.ValidationError("Last name can't have numbers or special characters.")
+        return last_name.capitalize()
     
     
 class ArticleForm(forms.ModelForm):
