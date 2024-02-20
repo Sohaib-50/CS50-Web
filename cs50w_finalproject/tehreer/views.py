@@ -5,7 +5,7 @@ from django.shortcuts import render
 from .models import User
 from .forms import ArticleForm, SignupForm
 from django.utils.html import strip_tags, strip_spaces_between_tags
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate as django_authenticate, login as django_login, logout as django_logout
 from django.utils.http import urlencode
 from django.urls import reverse
 
@@ -17,13 +17,7 @@ def auth(request):
     auth_messages: List[str] = request.session.pop("auth_messages", [])
     focus_signup: bool = request.session.pop("focus_signup", "false").lower()
     signup_form_data: Dict[str, str] = request.session.pop("signup_form_data", {})
-    print(signup_form_data, "eee")  
-
-    # debugging
-    # focus_signup = 'true'
-    # auth_messages = ["Poor email sick dubste Poor email", "sick dubstep","Poor email", "sick dubstep", "Poor email", "sick dubstep","Poor email", "sick dubstep","Poor email", "sick dubstep"]
-    # auth_messages = ["Enter a valid email address.", "Passwords do not match."]
-
+    print(signup_form_data, "eee")
 
     return render(request, 'tehreer/auth.html', {
         "auth_messages": auth_messages,
@@ -78,9 +72,18 @@ def signup(request):
 
         return HttpResponseRedirect(reverse("tehreer:auth"))
     
-    login(request, user)
+    django_login(request, user)
     return HttpResponseRedirect(reverse("tehreer:index"))
-    
+
+
+def signin(request):
+    # TODO
+    pass
+
+
+def signout(request):
+    django_logout(request)
+    return HttpResponseRedirect(reverse("tehreer:index"))
 
 
 
@@ -120,7 +123,3 @@ def signup(request):
 
 def signin(request):
     pass
-
-# def signout(request):
-#     logout(request)
-#     return HttpResponseRedirect(reverse("index"))

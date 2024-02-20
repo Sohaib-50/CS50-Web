@@ -127,8 +127,11 @@ nav a {
     display: flex;
     flex-direction: row;
     align-items: center;
-    flex-wrap: nowrap;
+    justify-content: center; 
     gap: 2px;
+    /* border:1px solid lightgray; */
+    width: max-content;
+    /* flex-wrap: nowrap; */
 }
 
 nav a:hover,
