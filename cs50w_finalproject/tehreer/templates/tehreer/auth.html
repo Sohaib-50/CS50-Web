@@ -43,8 +43,14 @@
 <div id="signup" {% if not focus_signup %} style="display: none;" {% endif %}>
     <h2> Sign Up </h2>
 
-    {% if auth_message and focus_signup %}
-        <div class="auth_message">{{ auth_message }}</div>
+    {% if auth_messages and focus_signup %}
+        <ul class="auth_messages">
+            {% for auth_message in auth_messages %}
+                <li class="auth_message">
+                    {{ auth_message }}
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 
 
@@ -55,25 +61,25 @@
 
         <div class="form-field">
             <label for="email">Email *</label>
-            <input class="auth-textual-input" type="email" name="email" placeholder="Email" required autocomplete="off">
+            <input class="auth-textual-input" type="email" name="email" placeholder="Email" required autocomplete="off" value="{{ signup_form.email.value|default:'' }}">
         </div>
 
         <div class="form-fields-row">
             <div class="form-field">
                 <label for="first_name">First Name *</label>
-                <input class="auth-textual-input" type="text" name="first_name" placeholder="First Name" required autocomplete="given-name">
+                <input class="auth-textual-input" type="text" name="first_name" placeholder="First Name" required autocomplete="given-name" value="{{ signup_form.first_name.value|default:'' }}">
             </div>
 
             <div class="form-field">
                 <label for="last_name">Last Name *</label>
-                <input class="auth-textual-input" type="text" name="last_name" placeholder="Last Name" required autocomplete="family-name">
+                <input class="auth-textual-input" type="text" name="last_name" placeholder="Last Name" required autocomplete="family-name" value="{{ signup_form.last_name.value|default:'' }}">
             </div>
         </div>
 
         <div class="form-fields-row">
             <div class="form-field">
                 <label for="password">Password *</label>
-                <input class="auth-textual-input" type="password" name="password1" placeholder="Password" required autocomplete="off" minlength="4">
+                <input class="auth-textual-input" type="password" name="password" placeholder="Password" required autocomplete="off" minlength="4">
             </div>
 
             <div class="form-field">
@@ -84,7 +90,7 @@
 
         <div class="form-field">
             <label for="bio">Bio (optional) </label>
-            <textarea class="auth-textual-input" name="bio" placeholder="Bio" rows="4"></textarea>
+            <textarea class="auth-textual-input" name="bio" placeholder="Bio" rows="4">{{ signup_form.bio.value|default:'' }}</textarea>
         </div>
 
         <div class="form-field">

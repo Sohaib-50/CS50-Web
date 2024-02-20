@@ -113,8 +113,12 @@ h2 {
     outline: none;
 }  
 
+.auth_messages {
+    list-style: none;
+}
+
 .auth_message {
     font-size: 0.8rem;
-    text-align: center; 
-    text-decoration: underline;
+    color:red
 }
+
