@@ -85,14 +85,14 @@ def signin(request):
 
     # check sign in successful
     if user is not None:
-        request.session.setdefault("auth_messages", []).append("Success.")
+        django_login(request, user)
+        return HttpResponseRedirect(reverse("tehreer:index"))
+    
     else:
         request.session.setdefault("auth_messages", []).append("Invalid email and/or password.")
         request.session["focus_signup"] = "false"
         request.session["signin_form_data"] = {"email": email}
-
-
-    return HttpResponseRedirect(reverse("tehreer:auth"))
+        return HttpResponseRedirect(reverse("tehreer:auth"))
 
 
 def signout(request):

@@ -132,6 +132,7 @@ nav a {
     /* border:1px solid lightgray; */
     width: max-content;
     /* flex-wrap: nowrap; */
+
 }
 
 nav a:hover,
@@ -150,6 +151,7 @@ svg {
 
 nav li {
     list-style: none;
+    cursor: pointer;
 }
 
 nav li:hover {

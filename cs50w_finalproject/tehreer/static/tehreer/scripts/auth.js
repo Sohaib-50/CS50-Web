@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    // signin signup view toggling logic
     let signin_div = document.querySelector("#signin");
     let signup_div = document.querySelector("#signup");
-
     document.querySelectorAll(".auth_toggler").forEach((toggler) => {
         toggler.addEventListener("click", () => {
             console.log("click");
@@ -14,4 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    
 });

@@ -1,6 +1,10 @@
 {% extends "tehreer/layout.html" %}
 {% load static %}
 
+{% block head %}
+<script type="module" src="{% static 'tehreer/scripts/logged_in.js' %}"></script>
+{% endblock %}
+
 
 {% block main %}
 <h1> All Articles </h1>

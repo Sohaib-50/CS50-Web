@@ -7,10 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- custom styles -->
     <link rel="stylesheet" href="{% static 'tehreer/styles/main.css' %}">
 
-    <!-- scripts -->
     <script type="module" src="{% static 'tehreer/scripts/main.js' %}"></script>
 
     <title> Tehreer </title>
@@ -67,8 +65,8 @@
                 {% else %}
                 
                 <!-- New Article Page -->
-                <li>
-                    <a href="#">
+                <li id="nav-write">
+                    <a>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path
@@ -81,8 +79,8 @@
                 </li>
 
                 <!-- Notifications Page -->
-                <li>
-                    <a href="#">
+                <li id="nav-notifications">
+                    <a >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-bell" viewBox="0 0 16 16">
                             <path
@@ -93,8 +91,8 @@
                 </li>
 
                 <!-- Profile Page -->
-                <li>
-                    <a href="#">
+                <li id="nav-profile">
+                    <a>
                         <div id="nav-profile">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-person" viewBox="0 0 16 16">
