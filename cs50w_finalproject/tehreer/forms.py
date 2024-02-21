@@ -1,10 +1,13 @@
 from django import forms
 from .models import User, Article
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 
 
 class SignupForm(forms.ModelForm):
+    '''
+    Form based on User model with additional password2 field for confirmation
+    '''
 
     password2 = forms.CharField()
     
@@ -49,6 +52,18 @@ class SignupForm(forms.ModelForm):
             raise forms.ValidationError("Last name can't have numbers or special characters.")
         return last_name.capitalize()
     
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        return email.lower()
+
+
+class SigninForm(AuthenticationForm):
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+
+
     
 class ArticleForm(forms.ModelForm):
     

@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .models import User
-from .forms import ArticleForm, SignupForm
+from .forms import ArticleForm, SignupForm, SigninForm
 from django.utils.html import strip_tags, strip_spaces_between_tags
 from django.contrib.auth import authenticate as django_authenticate, login as django_login, logout as django_logout
 from django.utils.http import urlencode
@@ -17,7 +17,7 @@ def auth(request):
     auth_messages: List[str] = request.session.pop("auth_messages", [])
     focus_signup: bool = request.session.pop("focus_signup", "false").lower()
     signup_form_data: Dict[str, str] = request.session.pop("signup_form_data", {})
-    print(signup_form_data, "eee")
+    signin_form_data: Dict[str, str] = request.session.pop("signin_form_data", {})
 
     return render(request, 'tehreer/auth.html', {
         "auth_messages": auth_messages,
@@ -28,7 +28,6 @@ def auth(request):
 
 def signup(request):
     signup_form = SignupForm(request.POST)
-    print(signup_form.is_valid())
 
     # invalid input(s)
     if not signup_form.is_valid():
@@ -77,8 +76,23 @@ def signup(request):
 
 
 def signin(request):
-    # TODO
-    pass
+
+    # try to sign in
+    email = request.POST.get("email", "").lower()
+    password = request.POST.get("password")
+    user: User | None = django_authenticate(request, username=email, password=password)
+    print(email, password, user)
+
+    # check sign in successful
+    if user is not None:
+        request.session.setdefault("auth_messages", []).append("Success.")
+    else:
+        request.session.setdefault("auth_messages", []).append("Invalid email and/or password.")
+        request.session["focus_signup"] = "false"
+        request.session["signin_form_data"] = {"email": email}
+
+
+    return HttpResponseRedirect(reverse("tehreer:auth"))
 
 
 def signout(request):
@@ -120,6 +134,3 @@ def signout(request):
     #         "focus_signup": True
     #     }))
 
-
-def signin(request):
-    pass
