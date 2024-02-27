@@ -130,12 +130,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 QUILL_CONFIGS = {
     'default': {
         'theme': 'snow',
+        'placeholder': "Write here..",
         'modules': {
                 'toolbar': [
                 [{"header": [1, 2, False]}],
                 ['bold', 'italic', 'underline'], 
                 [{'list': 'bullet'}, 'code-block', 'image']                
             ],
-        }
+        },
     }
 }

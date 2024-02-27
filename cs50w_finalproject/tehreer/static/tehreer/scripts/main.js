@@ -1,5 +1,4 @@
 import { handle_header_scroll_visibility, toggle_nav_collapse } from "./helpers.js";
-import { Articles } from "./components/articles.js"
 
 document.addEventListener("DOMContentLoaded", initial_setup);
 

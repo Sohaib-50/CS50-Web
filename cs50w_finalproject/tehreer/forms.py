@@ -69,7 +69,7 @@ class ArticleForm(forms.ModelForm):
     
     class Meta:
         model = Article
-        fields = ("title", "content")
+        fields = ["title", "content"]
 
         # remove labels
         labels = {
@@ -79,8 +79,8 @@ class ArticleForm(forms.ModelForm):
 
         widgets = {
             "title": forms.TextInput(attrs={
-                "class": "form-control form-control-lg",
+                "class": "article-form-title centered",
                 "placeholder": "Title",
-                "style": "text-align: center; border: none; border-bottom: 3px solid gray; border-radius: 0px; box-shadow: none; background-color: transparent; font-size: 2rem; font-weight: bold; color: #000000;"
+                # "style": "text-align: center; border: none; border-bottom: 3px solid gray; border-radius: 0px; box-shadow: none; background-color: transparent; font-size: 2rem; font-weight: bold; color: #000000;"
             })                
         }

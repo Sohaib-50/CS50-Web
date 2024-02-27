@@ -3,6 +3,8 @@
 
 {% block head %}
 <script type="module" src="{% static 'tehreer/scripts/logged_in.js' %}"></script>
+
+
 {% endblock %}
 
 
@@ -12,5 +14,10 @@
 
 <div>
     {{ request.user }}
+    {{ request.user.is_authenticated  }}
+</div>
+
+<div class="loader">
+    
 </div>
 {% endblock %}
