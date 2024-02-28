@@ -21,7 +21,7 @@
 
 <form class="article-form" action="{% url 'tehreer:write' %}" method="POST">
     {% csrf_token %}
-    <button type="submit">Publish</button>
+    <button class='button-primary' type="submit">Publish</button>
     {{ article_form }}
 </form>
 {% endblock %}

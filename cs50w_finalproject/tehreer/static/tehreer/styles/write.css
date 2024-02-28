@@ -2,22 +2,24 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    margin-top: 10px;
+    padding: 0 10%;
 }
 
-.article-form > button[type='submit'] {
+.article-form>button[type='submit'] {
     width: fit-content;
-    background: none;
-    /* height: 30px; */
-    padding: 10px;
-    border-radius: 10px;
+
+    margin-right: 20px;
     align-self: flex-end;
+    font-size: large;
+    margin-bottom: 10px;
 }
 
 .article-form-title {
     text-align: center;
     outline: none;
     border: none;
-    border-bottom: 3px solid var(--primary-color);
+    border-bottom: 4px solid var(--primary-color);
     border-radius: 0px;
     box-shadow: none;
     background-color: transparent;
@@ -32,9 +34,10 @@
     color: var(--primary-color-lightest);
 }
 
-.django-quill-widget-container{
+.django-quill-widget-container {
     margin-top: 10px;
 }
+
 
 .ql-toolbar {
     border: 2px solid var(--primary-color-lightest) !important;
@@ -43,10 +46,41 @@
     /* text-align: center; */
 }
 
-.ql-toolbar  * {
+.ql-toolbar * {
     border-radius: 15px;
 }
+
 #quill-id_content {
     border: none;
     height: 100%;
+}
+
+#quill-id_content  p,
+#quill-id_content ul,
+#quill-id_content ol {
+    margin-bottom: 0.8lh;
+}
+
+#quill-id_content  p {
+    font-size: 1rem;
+}
+
+#quill-id_content h1 {
+    font-size: 1.4rem;
+}
+
+#quill-id_content h2 {
+    font-size: 1.2rem;
+}
+
+/* #quill-id_content pre {
+    font-family: 'Fira Code', monospace;
+} */
+
+#quill-id_content p:has(> img) {
+    display: flex;
+    justify-content: center;
+}
+#quill-id_content img {
+    max-width: 65% !important;
 }
