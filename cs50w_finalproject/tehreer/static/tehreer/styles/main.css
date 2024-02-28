@@ -299,3 +299,22 @@ main {
     70% { transform: rotate(270deg); }
     100% { transform: rotate(360deg); }
   }
+
+
+
+  
+.button-primary {
+    padding: 9px 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--primary-color-light);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+
+
+.button-primary:hover {
+    background-color: var(--primary-color);
+}

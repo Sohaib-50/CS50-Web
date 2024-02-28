@@ -17,34 +17,36 @@
     text-align: center;
     outline: none;
     border: none;
-    border-bottom: 3px solid gray;
+    border-bottom: 3px solid var(--primary-color);
     border-radius: 0px;
     box-shadow: none;
     background-color: transparent;
     font-size: 2rem;
     font-weight: bold;
-    color: #000000;
+    color: var(--primary-color);
     width: 100%;
     padding-bottom: 10px;
 }
 
 .article-form-title::placeholder {
-    color: lightgrey;
+    color: var(--primary-color-lightest);
 }
 
 .django-quill-widget-container{
     margin-top: 10px;
 }
 
+.ql-toolbar {
+    border: 2px solid var(--primary-color-lightest) !important;
+    border-radius: 20px !important;
+    width: 100%;
+    /* text-align: center; */
+}
+
+.ql-toolbar  * {
+    border-radius: 15px;
+}
 #quill-id_content {
     border: none;
     height: 100%;
-}
-
-.ql-toolbar {
-    /* border: none !important; */
-    border: 2px solid lightgrey !important;
-    /* border-bottom: none !important; */
-    border-radius: 20px !important;
-
 }

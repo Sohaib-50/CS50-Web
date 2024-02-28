@@ -93,22 +93,6 @@ h2 {
     padding: 10px;
 }
 
-.auth-button-input {
-    padding: 9px 10px;
-    border: none;
-    border-radius: 20px;
-    background-color: var(--primary-color-light);
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    outline: none;
-}
-
-
-.auth-button-input:hover {
-    background-color: var(--primary-color);
-}
-
 .auth-textual-input:active, .auth-textual-input:focus {  
     outline: none;
 }  

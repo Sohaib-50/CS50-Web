@@ -135,7 +135,7 @@ QUILL_CONFIGS = {
                 'toolbar': [
                 [{"header": [1, 2, False]}],
                 ['bold', 'italic', 'underline'], 
-                [{'list': 'bullet'}, 'code-block', 'image']                
+                [{'list': 'bullet'}, {'list': 'ordered'}, 'code-block', 'image']                
             ],
         },
     }
