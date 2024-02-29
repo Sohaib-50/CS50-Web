@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from .models import User
 from .forms import ArticleForm, SignupForm, SigninForm
-from django.utils.html import strip_tags, strip_spaces_between_tags
+from django.utils import html
 from django.contrib.auth import authenticate as django_authenticate, login as django_login, logout as django_logout
 from django.utils.http import urlencode
 from django.urls import reverse
@@ -101,6 +101,27 @@ def signout(request):
     
 
 def write(request):
+
+    if request.method == "GET":
+        return render(request, 'tehreer/write.html', {
+            "article_form": ArticleForm()
+        })
+    
+    
+    # Else If POST request
+    print("pst", request.POST)
+    article_form = ArticleForm(request.POST)
+    if article_form.is_valid():
+        content_text = html.strip_tags(eval(article_form.cleaned_data['content'])['html'])
+        print(f"Content: {content_text}", type(content_text))
+    else:
+        print("dirty")
+    # print(article_form.is_valid())
+    # print(article_form.data.get("content", None))
     return render(request, 'tehreer/write.html', {
-        "article_form": ArticleForm()
-    })
+            "article_form": article_form
+        })
+
+
+
+

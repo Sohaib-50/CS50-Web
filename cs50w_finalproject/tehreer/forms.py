@@ -1,6 +1,8 @@
 from django import forms
 from .models import User, Article
 from django.contrib.auth.forms import AuthenticationForm
+from django.utils import html
+from django_quill.quill import Quill, QuillParseError
 
 
 
@@ -81,6 +83,15 @@ class ArticleForm(forms.ModelForm):
             "title": forms.TextInput(attrs={
                 "class": "article-form-title centered",
                 "placeholder": "Title",
-                # "style": "text-align: center; border: none; border-bottom: 3px solid gray; border-radius: 0px; box-shadow: none; background-color: transparent; font-size: 2rem; font-weight: bold; color: #000000;"
-            })                
+            }),
         }
+
+    def clean_content(self):
+        content = (self.cleaned_data.get('content'))
+        try:
+            print(f"Quillified content: {Quill(content).plain}")
+            print(Quill(content).plain)
+        except QuillParseError:
+            print(f"Quillified content: parse error")
+
+        return content
