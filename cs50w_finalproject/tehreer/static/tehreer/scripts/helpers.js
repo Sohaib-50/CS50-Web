@@ -27,5 +27,11 @@ function make_component(html) {
     return component;
 }
 
+function strip_tags(html_string) {
+    console.log(typeof(html_string));
+    return html_string.replace(/<[^>]*>/g, '');
+}
 
-export { handle_header_scroll_visibility, toggle_nav_collapse, make_component };
+
+export { handle_header_scroll_visibility, toggle_nav_collapse, make_component, strip_tags };
+

@@ -318,3 +318,23 @@ main {
 .button-primary:hover {
     background-color: var(--primary-color);
 }
+
+.button-primary.disabled {
+    background-color: var(--primary-color-lighter);
+    cursor: default;
+}
+
+
+.error_messages {
+    list-style: none;
+}
+
+.error_message {
+    font-size: 0.8rem;
+    color:red;
+}
+
+.error_message:not(:last-child) {
+    margin-bottom: 4px;
+}
+

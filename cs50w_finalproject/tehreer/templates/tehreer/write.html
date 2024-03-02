@@ -3,13 +3,11 @@
 
 {% block head %}
 
+    <!-- quill media (for rich text editor)  -->
+    {% include 'django_quill/media.html' %}
+
     <script type="module" src="{% static 'tehreer/scripts/logged_in.js' %}"></script>
-
-    <!-- quill media for article writing, loaded if some user is logged in -->
-    {% if request.user.is_authenticated  %}
-        {% include 'django_quill/media.html' %}
-    {% endif %}
-
+    <script type="module" src="{% static 'tehreer/scripts/write.js' %}"></script>
     <link rel="stylesheet" href="{% static 'tehreer/styles/write.css' %}">
 
 
@@ -19,9 +17,9 @@
 
 {% block main %}
 
-<form class="article-form" action="{% url 'tehreer:write' %}" method="POST">
+<form class="article-form" id="article-form" action="{% url 'tehreer:write' %}" method="POST">
     {% csrf_token %}
-    <button class='button-primary' type="submit">Publish</button>
+    <button class='button-primary disabled' type="submit">Publish</button>
     {{ article_form }}
 </form>
 {% endblock %}
