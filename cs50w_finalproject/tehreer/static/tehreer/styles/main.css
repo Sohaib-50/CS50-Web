@@ -319,7 +319,11 @@ main {
     background-color: var(--primary-color);
 }
 
-.button-primary.disabled {
+/* .button-primary:disabled {
+    background-color: var(--primary-color-lighter);
+    cursor: default;
+} */
+.button-primary:disabled {
     background-color: var(--primary-color-lighter);
     cursor: default;
 }

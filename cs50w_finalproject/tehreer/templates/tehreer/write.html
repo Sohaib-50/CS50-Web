@@ -19,7 +19,7 @@
 
 <form class="article-form" id="article-form" action="{% url 'tehreer:write' %}" method="POST">
     {% csrf_token %}
-    <button class='button-primary disabled' type="submit">Publish</button>
+    <button disabled id='article-form-publish' class='button-primary' type="submit">Publish</button>
     {{ article_form }}
 </form>
 {% endblock %}

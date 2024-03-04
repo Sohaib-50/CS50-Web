@@ -1,21 +1,30 @@
 import { make_component, strip_tags } from "./helpers.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-    handle_form_button_state();
 
-    document.querySelector("#article-form")
-        .addEventListener('submit', handle_form_submission);
-    
+    // event listeners to enable/disable form based on whether title and content are present
+    document.querySelector("#id_title").addEventListener("input", handle_form_button_state);
+    document.querySelector(".ql-editor").addEventListener("keydown", handle_form_button_state);
+    document.querySelector(".ql-editor").addEventListener("input", handle_form_button_state);
+
+    // event listener for form allowing it to be submitted only if both title and content are present
+    document.querySelector("#article-form").addEventListener("submit", handle_form_submission);
+
 });
 
+
 function handle_form_button_state() {
-    document.querySelector("#article-form")
+    const article_title = document.querySelector("#id_title").value.trim();
+
+    const article_quill_content = document.querySelector("#quill-input-id_content").value.trim();
+    const article_content = article_quill_content ? strip_tags(JSON.parse(article_quill_content).html).trim() : '';
+
+    document.querySelector("#article-form-publish").disabled = article_title === '' || article_content === '';
 }
 
 function handle_form_submission(event) {
-    console.log("Handling form submission");
 
-    clear_error_messages();
+    clear_notifications();
 
     const title_value = document.querySelector('#id_title').value.trim();
     if (title_value === '') {
@@ -37,16 +46,17 @@ function handle_form_submission(event) {
 
 }
 
-function clear_error_messages() {
+function clear_notifications() {
     document.querySelector('#notifications').innerHTML = '';
 }
 
-function display_notification(error_message) {
-    
+
+function display_notification(notification_content) {
+
     document.querySelector('#notifications').appendChild(
         make_component(`
             <div class="notification">
-                ${ error_message }
+                ${notification_content}
             </div>
         `)
     );
