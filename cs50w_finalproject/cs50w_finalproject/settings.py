@@ -140,3 +140,5 @@ QUILL_CONFIGS = {
         },
     }
 }
+
+LOGIN_URL = '/tehreer/auth/'

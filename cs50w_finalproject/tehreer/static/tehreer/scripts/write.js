@@ -24,11 +24,11 @@ function handle_form_button_state() {
 
 function handle_form_submission(event) {
 
-    clear_notifications();
+    clear_toasts();
 
     const title_value = document.querySelector('#id_title').value.trim();
     if (title_value === '') {
-        display_notification("Your article must have a title.");
+        display_toast("Your article must have a title.");
         event.preventDefault();
         return;
     }
@@ -39,24 +39,24 @@ function handle_form_submission(event) {
         :
         content_quill_value;
     if (content_value === '') {
-        display_notification("Please write some content.");
+        display_toast("Please write some content.");
         event.preventDefault();
         return;
     }
 
 }
 
-function clear_notifications() {
-    document.querySelector('#notifications').innerHTML = '';
+function clear_toasts() {
+    document.querySelector('#toasts').innerHTML = '';
 }
 
 
-function display_notification(notification_content) {
+function display_toast(toast_content) {
 
-    document.querySelector('#notifications').appendChild(
+    document.querySelector('#toasts').appendChild(
         make_component(`
-            <div class="notification">
-                ${notification_content}
+            <div class="toast">
+                ${toast_content}
             </div>
         `)
     );

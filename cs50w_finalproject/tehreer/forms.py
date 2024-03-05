@@ -1,7 +1,6 @@
 from django import forms
 from .models import User, Article
 from django.contrib.auth.forms import AuthenticationForm
-from django.utils import html
 from django_quill.quill import Quill, QuillParseError
 
 
@@ -87,11 +86,10 @@ class ArticleForm(forms.ModelForm):
         }
 
     def clean_content(self):
-        content = (self.cleaned_data.get('content'))
+        content = self.cleaned_data.get('content')
         try:
-            print(f"Quillified content: {Quill(content).plain}")
-            print(Quill(content).plain)
+            if Quill(content).plain.strip() == "":
+                raise forms.ValidationError("Article must have some content.")
         except QuillParseError:
-            print(f"Quillified content: parse error")
-
+            raise forms.ValidationError("Invalid article content.")
         return content

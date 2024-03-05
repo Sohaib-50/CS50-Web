@@ -124,7 +124,12 @@
     </header>
 
 
-    <div id="notifications">
+    <div id="toasts">
+        {% for message in messages %}
+            {% if 'toast' in message.tags %}
+                <div class="toast"> {{ message }} </div>
+            {% endif %}
+        {% endfor %}
     </div>
     
     <main>

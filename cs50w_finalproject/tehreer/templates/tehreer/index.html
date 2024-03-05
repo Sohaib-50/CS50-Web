@@ -17,6 +17,18 @@
     {{ request.user.is_authenticated  }}
 </div>
 
+<div>
+    {% for article in articles %}
+        <div>
+            <hr>
+            Author: {{ article.author }}<br>
+            Title: {{ article.title }}<br>
+            Content: {{ article.content.html|safe }}<br>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
 <div class="loader">
     
 </div>

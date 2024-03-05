@@ -266,7 +266,7 @@ class Topic(models.Model):
         return self.name
 
 class Article(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articles")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="articles")
     title = models.CharField(max_length=100, blank=False, null=False)
     content = QuillField()
     published_at = models.DateTimeField(auto_now_add=True)

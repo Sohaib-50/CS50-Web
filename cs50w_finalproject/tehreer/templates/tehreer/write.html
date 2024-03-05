@@ -20,6 +20,7 @@
 <form class="article-form" id="article-form" action="{% url 'tehreer:write' %}" method="POST">
     {% csrf_token %}
     <button disabled id='article-form-publish' class='button-primary' type="submit">Publish</button>
+    <input hidden name='author' value="{{ request.user }}">
     {{ article_form }}
 </form>
 {% endblock %}

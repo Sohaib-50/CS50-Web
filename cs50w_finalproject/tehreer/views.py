@@ -1,17 +1,23 @@
-from typing import List, Dict
+from typing import Dict, List
+
+from django.contrib import messages
+from django.contrib.auth import authenticate as django_authenticate
+from django.contrib.auth import login as django_login
+from django.contrib.auth import logout as django_logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
-from .models import User
-from .forms import ArticleForm, SignupForm, SigninForm
-from django.utils import html
-from django.contrib.auth import authenticate as django_authenticate, login as django_login, logout as django_logout
-from django.utils.http import urlencode
+from django.shortcuts import redirect, render
 from django.urls import reverse
+
+from .forms import ArticleForm, SigninForm, SignupForm
+from .models import User, Article
 
 
 def index(request):
-    return render(request, 'tehreer/index.html')
+    return render(request, 'tehreer/index.html', {
+        "articles": Article.objects.all()
+    })
 
 def auth(request):
     auth_messages: List[str] = request.session.pop("auth_messages", [])
@@ -100,6 +106,7 @@ def signout(request):
     return HttpResponseRedirect(reverse("tehreer:index"))
     
 
+@login_required
 def write(request):
 
     if request.method == "GET":
@@ -107,18 +114,20 @@ def write(request):
             "article_form": ArticleForm()
         })
     
-    
-    # Else If POST request
-    print("pst", request.POST)
+    # POST request
     article_form = ArticleForm(request.POST)
+
     if article_form.is_valid():
-        content_text = html.strip_tags(eval(article_form.cleaned_data['content'])['html'])
-        print(f"Content: {content_text}", type(content_text))
+        article = article_form.save(commit=False)
+        article.author = request.user
+        article.save()
+        messages.info(request, 'Article published', extra_tags='toast')
+        return redirect("tehreer:index")
+    
     else:
-        print("dirty")
-    # print(article_form.is_valid())
-    # print(article_form.data.get("content", None))
-    return render(request, 'tehreer/write.html', {
+        print("Invalid form")
+        messages.info(request, 'Error: unable to publish, please check your content and try again', extra_tags='toast')
+        return render(request, 'tehreer/write.html', {
             "article_form": article_form
         })
 
