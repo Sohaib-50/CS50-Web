@@ -9,14 +9,23 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django_quill.quill import Quill
 
 from .forms import ArticleForm, SigninForm, SignupForm
-from .models import User, Article
+from .models import Article, User
 
 
 def index(request):
+    articles = Article.objects.all()
+    for article in articles:
+        print(article.content.plain[:100])
+        print("--------")
+    # for article in articles:
+    #     display_body = strip_spaces_between_tags((article.content.html))[:100] + "..."
+    #     article.display_body = display_body
+    #     print(article.display_body)
     return render(request, 'tehreer/index.html', {
-        "articles": Article.objects.all()
+        "articles": articles
     })
 
 def auth(request):
@@ -132,5 +141,23 @@ def write(request):
         })
 
 
+## API Views
+def articles_api(request):
+    articles = Article.objects.all()
+    for article in articles:
+        print(article.content.plain[:100])
+        print("--------")
 
+def article_api(request, article_id):
+
+    # Query requested article
+    try:
+        article = Article.objects.get(pk=article_id)
+    except Article.DoesNotExist:
+        return JsonResponse({"error": "Article not found"}, status=404)
+    
+    return JsonResponse({
+        "article_id": article.id,
+        "title": article.title,
+    }, safe=False, status=200)
 

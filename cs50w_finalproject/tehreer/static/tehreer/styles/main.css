@@ -270,7 +270,8 @@ search>input {
 
 main {
     width: 100%;
-    padding: 10px 5%;
+    padding: 30px 7%;
+    margin-top: 0;
 }
 
 
@@ -299,7 +300,6 @@ main {
     70% { transform: rotate(270deg); }
     100% { transform: rotate(360deg); }
   }
-
 
 
   
@@ -342,3 +342,7 @@ main {
     margin-bottom: 4px;
 }
 
+
+.rounded {
+    border-radius: 20px;
+}
