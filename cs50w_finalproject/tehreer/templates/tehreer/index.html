@@ -6,6 +6,7 @@
 <script defer type="module" src="{% static 'tehreer/scripts/home.js' %}"></script>
 
 <link rel="stylesheet" href="{% static 'tehreer/styles/home.css' %}">
+<link rel="stylesheet" href="{% static 'tehreer/styles/article.css' %}">
 
 
 {% endblock %}
@@ -13,7 +14,7 @@
 
 {% block main %}
 
-<div class="home_view">
+<div id="home_view">
 
     <div class="articles">
         {% for i in "1234" %}
@@ -71,10 +72,10 @@
 </div>
 
 
-<div class="article_view">
-    <aside id="article-left" style="display: none;">
+<div id="article_view" style="display: none;">
+    <aside id="article-left">
         <div id="article-title">
-            <h1> </h1>
+            <h1> <div class='loader'></div></h1>
         </div>
 
         <div id="article-author">
@@ -89,23 +90,23 @@
         </div>
 
 
-        <div id="article-topics">
-            <a href="#">Programming</a>
-            <a href="#">Github</a>
-            <a href="#">AI</a>
-            <a href="#">Github Copilot</a>
-            <a href="#">GenAI</a>
+        <div class="topics">
+            <a class='rounded' href="#">Programming</a>
+            <a class='rounded' href="#">Github</a>
+            <a class='rounded' href="#">AI</a>
+            <a class='rounded' href="#">Github Copilot</a>
+            <a class='rounded' href="#">GenAI</a>
         </div>
 
 
     </aside>
 
 
-    <article style="display: none;">
+    <article>
     </article>
 
     <!-- likes and comments -->
-    <aside id="article-right" style="display: none;">
+    <aside id="article-right">
         <div id="article-likes">
             <button id="like-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star"
@@ -159,5 +160,7 @@
         </div>
     </aside>
 </div>
+
+
 
 {% endblock %}

@@ -243,6 +243,14 @@ class User(AbstractUser):
             Q(performer__in=self.followings.all(), action_type="post")
         )
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'bio': self.bio,
+            'profile_picture': self.profile_picture.url if self.profile_picture else None,
+            'followers_count': self.followers.count(),
+        }
+
     # usage examples:
     # Create a user (email, password, firstname, lastname):
     # >>> from django.contrib.auth.models import User 

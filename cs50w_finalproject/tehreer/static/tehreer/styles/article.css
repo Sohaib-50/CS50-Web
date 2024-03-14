@@ -1,4 +1,4 @@
-main {
+.article_view {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -73,7 +73,7 @@ article img {
 
 }
 
-#article-left #article-topics {
+/* #article-left #article-topics {
     margin: 15px 0;
     display: flex;
     flex-direction: row;
@@ -90,10 +90,10 @@ article img {
     font-size: 0.8rem;
     text-align: center;
     width: fit-content;
-}
+} */
 
-#article-left #article-topics a:hover,
-#article-left #article-topics a:active {
+#article-left .topics a:hover,
+#article-left .topics a:active {
     background-color: var(--primary-color);
     color: white;
 }
