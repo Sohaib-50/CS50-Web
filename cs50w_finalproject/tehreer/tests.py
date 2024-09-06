@@ -9,6 +9,7 @@ class TestTehreer(TestCase):
 
     def setUp(self):
 
+        # Create users
         alex = User.objects.create_user(username='alex@foo.com', email='alex@foo.com', password='alex', first_name='Alex', last_name='Ander')
         bob = User.objects.create_user(username='bob@bar.com', email='bob@bar.com', password='bob', first_name='Bob', last_name='TheBuilder')
         carey = User.objects.create_user(username='carey@baz.com', email='carey@baz.com', password='carey', first_name='Carey', last_name='Anderson')
@@ -25,7 +26,7 @@ class TestTehreer(TestCase):
 
         self.assertEqual(self.articles['article0'].likers.count(), 0)  # check 0 likes initially
         
-        # make a user, Bob like article 0
+        # make a user, Bob, like article 0
         self.articles['article0'].like(self.users['bob'])
         self.assertEqual(self.articles['article0'].likers.count(), 1)  # check 1 like
         self.assertIn(self.users['bob'], self.articles['article0'].likers.all())  # check bob is counted as liker
