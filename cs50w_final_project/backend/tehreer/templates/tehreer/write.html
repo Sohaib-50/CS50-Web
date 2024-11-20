@@ -1,0 +1,26 @@
+{% extends "tehreer/layout.html" %}
+{% load static %}
+
+{% block head %}
+
+    <!-- quill media (for rich text editor)  -->
+    {% include 'django_quill/media.html' %}
+
+    <script type="module" src="{% static 'tehreer/scripts/logged_in.js' %}"></script>
+    <script type="module" src="{% static 'tehreer/scripts/write.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'tehreer/styles/write.css' %}">
+
+
+
+{% endblock %}
+
+
+{% block main %}
+
+<form class="article-form" id="article-form" action="{% url 'tehreer:write' %}" method="POST">
+    {% csrf_token %}
+    <button disabled id='article-form-publish' class='button-primary' type="submit">Publish</button>
+    <input hidden name='author' value="{{ request.user }}">
+    {{ article_form }}
+</form>
+{% endblock %}
